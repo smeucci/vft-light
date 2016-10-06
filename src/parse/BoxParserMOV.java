@@ -104,26 +104,26 @@ public class BoxParserMOV extends BoxParser {
 		}
 	}
 	
-	protected Element hdlrSpecial(Element itemp, String[] str) {
+	protected Element hdlrSpecial(Element item, String[] str) {
 		//extract the content of the fields of the node "hdlr" from the IsoFile.
 		try {
 			String[] result = null;			   
 			for (String s: str) {			
 				result = s.split("\\=");
-				if ( result[1].startsWith("Core")) {
+				if (result[1].startsWith("Core")) {
 					String test = result[1].replaceAll("Core","Core");	  
 					result[1] = test;
-				} else if ( result[1].endsWith("Data Handler")) {
+				} else if (result[1].endsWith("Data Handler")) {
 					result[1] = "";	  
 					String test = "Core Media Data Handler";
 					result[1] = test;
 				}
-				itemp.setAttribute(result[0], result[1]);
+				item.setAttribute(result[0], result[1]);
 			}
 		} catch (Exception e) {
 			System.out.println("error in hdlr, i am in func");
 		}
-		return itemp;
+		return item;
 	}
 	
 }
