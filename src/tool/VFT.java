@@ -62,7 +62,7 @@ public class VFT {
 		BoxParserMP4 boxparser = new BoxParserMP4(boxes);
 		boxparser.getBoxes(isoFile, root);
 		//save the content of the container on a xml file using the saveOnFile function of the FileReaderSaver class
-		fileSaver.saveOnFile(new Document(root););
+		fileSaver.saveOnFile(new Document(root));
 		return fileSaver.getFilename();
 	}
 	
@@ -80,7 +80,7 @@ public class VFT {
 		BoxParserMOV boxparser = new BoxParserMOV(boxes);
 		boxparser.getBoxes(isoFile, root);
 		//save the content of the container on a xml file using the saveOnFile function of the FileReaderSaver class
-		fileSaver.saveOnFile(new Document(root););
+		fileSaver.saveOnFile(new Document(root));
 		return fileSaver.getFilename();
 	}
 	
