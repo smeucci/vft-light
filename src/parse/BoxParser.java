@@ -2,7 +2,6 @@ package parse;
 
 import java.util.List;
 
-import org.jdom2.Document;
 import org.jdom2.Element;
 
 import com.coremedia.iso.IsoFile;
@@ -24,13 +23,13 @@ public abstract class BoxParser {
 	protected abstract void recXmlBuilder(Element item, AbstractContainerBox ab, int i);
 	
 	//concrete class
-	public void getBoxes(IsoFile isoFile, Document document, Element root) throws Exception {
+	public void getBoxes(IsoFile isoFile, Element root) throws Exception {
 		//insert in root the content of the container, contained in isoFile
 		for (Box box: this.boxes) {
     		if (box.getType() == "ftyp") {
     			Element item = new Element(box.getType());
     			root.addContent(separateNameValueSpecial(item, extractNameValue(box.toString()))); 			
-			} else if (box.getType() == "moov") {			
+			} else if (box.getType() == "moov") {
 				Element item = new Element(box.getType());	
 				MovieBox moov = isoFile.getMovieBox();
 				if (moov != null) {

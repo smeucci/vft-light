@@ -47,7 +47,7 @@ public class stsdUnderBoxMOV extends stsdUnderBox {
 		List<Box> boxes = ab.getBoxes();
 		for (Box box: boxes) {
 			if (box.getType() != "avc1") {
-				System.out.println(); //TODO what does it do?
+				//System.out.println(); //TODO what does it do?
     			Element new_item = new Element(box.getType());
     			item.addContent(new_item);
 			}

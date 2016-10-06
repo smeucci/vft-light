@@ -6,6 +6,8 @@ TODOS
 - fare classe astratta per BoxParser
 - fare classe astratta per stsdUnderBox e classe derivata stsdUnderBoxMP4
 - fare package utils (countOccurrence, removeSquareBrackets)
+- aggiunger error message nei catch
+- contains in parser, inutile l'or poichè converte le stringhe in lowercase
 
 
 Migliorie libreria VFT
@@ -17,3 +19,17 @@ Migliorie libreria VFT
 - aggiungere all'eseguibile da terminale funzionalità della prima versione: parser di un video, dato un xml disegnarlo.
 - commentare e documentare meglio il codice.
 - strutturare meglio il codice per essere usato come una libreria con più facilità.
+
+ISSUES
+======
+
+- RISOLTO - parserMOV, nel box mvhd i valori sono corretti ma i nomi degli attributi sono sbagliati (compatibleBrand_i del box ftyp al posto dei corretti)
+- parserMOV, nel box minf->stbl->stsd->mp4a l'attributo boxes è pieno invece che vuoto; inoltre tale campo si ripete poco dopo, stavolta nella forma attesa. Fra le due ripetizioni ci sono alcuni boxes vuoti "chan" e "wave". Il primo box mp4a ha il tag di chiusura col nome, mentre quello atteso no.
+In realtà era corretto questo funzionamento. Dipendeva dall'uso precedente di countOccurrences per cercare "{". La guarda era per n == 1, ma in questo caso n era uguale a due. Usando contains il problema è risolto perchè ritorna true se anche n fosse uguale a 2.
+Rimangono comunque degli errori di parsing: solo una parte viene presa e le stringhe non stanno dentro boxes. Splittare prima ; e poi ,
+Errore riga 80 in separateNameValue.
+
+[A, u, d, i, o, S, a, m, p, l, e, E, n, t, r, y, {, b, y, t, e, s, P, e, r, S, a, m, p, l, e, =, 0, ,,  , b, y, t, e, s, P, e, r, F, r, a, m, e, =, 0, ,,  , b, y, t, e, s, P, e, r, P, a, c, k, e, t, =, 0, ,,  , s, a, m, p, l, e, s, P, e, r, P, a, c, k, e, t, =, 0, ,,  , p, a, c, k, e, t, S, i, z, e, =, 0, ,,  , c, o, m, p, r, e, s, s, i, o, n, I, d, =, 8, 7, 0, 4, ,,  , s, o, u, n, d, V, e, r, s, i, o, n, =, 2, 5, 9, 7, 1, ,,  , s, a, m, p, l, e, R, a, t, e, =, 1, 1, 5, 2, ,,  , s, a, m, p, l, e, S, i, z, e, =, 3, 2, 8, 9, 6, ,,  , c, h, a, n, n, e, l, C, o, u, n, t, =, 8, 9, 6, ,,  , b, o, x, e, s, =, [, ], }]
+
+
+[A, u, d, i, o, S, a, m, p, l, e, E, n, t, r, y, {, b, y, t, e, s, P, e, r, S, a, m, p, l, e, =, 2, ,,  , b, y, t, e, s, P, e, r, F, r, a, m, e, =, 2, ,,  , b, y, t, e, s, P, e, r, P, a, c, k, e, t, =, 2, ,,  , s, a, m, p, l, e, s, P, e, r, P, a, c, k, e, t, =, 1, 0, 2, 4, ,,  , p, a, c, k, e, t, S, i, z, e, =, 0, ,,  , c, o, m, p, r, e, s, s, i, o, n, I, d, =, 6, 5, 5, 3, 4, ,,  , s, o, u, n, d, V, e, r, s, i, o, n, =, 1, ,,  , s, a, m, p, l, e, R, a, t, e, =, 4, 4, 1, 0, 0, ,,  , s, a, m, p, l, e, S, i, z, e, =, 1, 6, ,,  , c, h, a, n, n, e, l, C, o, u, n, t, =, 1, ,,  , b, o, x, e, s, =, [, c, o, m, ., c, o, r, e, m, e, d, i, a, ., i, s, o, ., b, o, x, e, s, ., U, n, k, n, o, w, n, B, o, x, @, 2, b, 5, 5, 2, 9, 2, 0, ,,  , A, p, p, l, e, W, a, v, e, B, o, x, [, O, r, i, g, i, n, a, l, F, o, r, m, a, t, B, o, x, [, d, a, t, a, F, o, r, m, a, t, =, m, p, 4, a, ], ;, A, u, d, i, o, S, a, m, p, l, e, E, n, t, r, y, {, b, y, t, e, s, P, e, r, S, a, m, p, l, e, =, 0, ,,  , b, y, t, e, s, P, e, r, F, r, a, m, e, =, 0, ,,  , b, y, t, e, s, P, e, r, P, a, c, k, e, t, =, 0, ,,  , s, a, m, p, l, e, s, P, e, r, P, a, c, k, e, t, =, 0, ,,  , p, a, c, k, e, t, S, i, z, e, =, 0, ,,  , c, o, m, p, r, e, s, s, i, o, n, I, d, =, 8, 7, 0, 4, ,,  , s, o, u, n, d, V, e, r, s, i, o, n, =, 2, 5, 9, 7, 1, ,,  , s, a, m, p, l, e, R, a, t, e, =, 1, 1, 5, 2, ,,  , s, a, m, p, l, e, S, i, z, e, =, 3, 2, 8, 9, 6, ,,  , c, h, a, n, n, e, l, C, o, u, n, t, =, 8, 9, 6, ,,  , b, o, x, e, s, =, [, ], }, ;, c, o, m, ., g, o, o, g, l, e, c, o, d, e, ., m, p, 4, p, a, r, s, e, r, ., b, o, x, e, s, ., m, p, 4, ., E, S, D, e, s, c, r, i, p, t, o, r, B, o, x, @, 1, ;, c, o, m, ., c, o, r, e, m, e, d, i, a, ., i, s, o, ., b, o, x, e, s, ., U, n, k, n, o, w, n, B, o, x, @, 1, 5, 6, 3, d, a, 5, ], ], }]

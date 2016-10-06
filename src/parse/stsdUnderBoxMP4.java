@@ -37,7 +37,7 @@ public class stsdUnderBoxMP4 extends stsdUnderBox {
     	//check if the box stsd contains optional boxes
 		List<Box> boxes = ab.getBoxes();
 		for (Box box: boxes) {			
-			System.out.println(); //TODO what does it do?
+			//System.out.println(); //TODO what does it do?
 			Element new_item = new Element(box.getType());
 			item.addContent(new_item);
 		}   	

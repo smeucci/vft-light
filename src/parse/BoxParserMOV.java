@@ -31,15 +31,15 @@ public class BoxParserMOV extends BoxParser {
 						recXmlBuilder(new_item, ab, i++);
 						item.addContent(new_item);
 					} catch (Exception e) {
-						System.out.println("Inside if of trak, i am the last node, inside moov"); //TODO WHAT?
+						System.out.println("Inside if of trak, i am the last node, inside moov");
 					}
 				} else {
 					item.addContent(new_item);
 				}
 			} else {
 				Element new_item = new Element(box.getType());
-				if(box.getType() == "mvhd") {
-					item.addContent(separateNameValueSpecial(new_item, extractNameValue(box.toString())));
+				if (box.getType() == "mvhd") {
+					item.addContent(separateNameValue(new_item, extractNameValue(box.toString())));
 				} else {
 					item.addContent(new_item);
 				}
@@ -62,11 +62,11 @@ public class BoxParserMOV extends BoxParser {
 						new_ab = (AbstractContainerBox) box;
 						if (new_ab.getType() == "dref") {
 							DataReferenceBox db = (DataReferenceBox) new_ab;
-							item.addContent(separateNameValueSpecial(new_item, extractNameValue(extractDataReferenceBox(db))));
+							item.addContent(separateNameValue(new_item, extractNameValue(extractDataReferenceBox(db))));
 						} 
 						if (new_ab.getType() == "stsd") { //TODO add else if
 							SampleDescriptionBox stsd = (SampleDescriptionBox) new_ab;
-							item.addContent(separateNameValueSpecial(new_item, extractNameValue(extractSampleDescriptionBox(stsd))));
+							item.addContent(separateNameValue(new_item, extractNameValue(extractSampleDescriptionBox(stsd))));
 							try {
 								//the class stsdUnderBoxMOV is used to insert in item
 								//the content of the box stsd

@@ -45,12 +45,13 @@ public abstract class stsdUnderBox {
 	
 	protected String[] getmp4a(String box) {
 		//extract the content of the fiels of the node mp4a from stsd
-    	int i = countOccurrences(box, "{");    	
-    	String[] result = null;    	
-    	if (i == 1) {
+		//TODO improve parsing
+    	String[] result = null;   	
+    	if (contains(box, "{")) {
     		String[] splits = box.split("\\{");
-    		for (String s:splits) {    			
-    			result = s.split("\\,");	
+    		for (String s:splits) {
+    			result = s.split("\\,");
+    			//result = append(result, s.split("\\,"));
     		}	
     	}
     	return result;	
@@ -70,17 +71,15 @@ public abstract class stsdUnderBox {
 	protected Element separateNameValue(Element item, String[] str) {	
 		//return an item with attributes in the form name="value"
 		String[] result = null;			   
-		for (String s:str) {			
+		for (String s: str) {			
 			result = s.split("\\=");					
 			if (result.length == 1) {				
 				item.setAttribute(result[0].trim(), "");
 			} else {				
-				item.setAttribute(result[0].trim(), result[1]);
+				item.setAttribute(result[0].trim(), result[1]); //TODO fix problem with special fields
 			}			
 		}			
 		return item;
 	}
-	
-	
 	
 }
