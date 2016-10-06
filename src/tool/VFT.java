@@ -53,7 +53,6 @@ public class VFT {
 		Element root = new Element("root");
 		//TODO modelName and phoneBrandName should be read from the console during the parsing phase
 		root.setAttribute("modelName", "phoneBrandName");
-		Document document = new Document(root);
 		//create an ISOFILE using the FileReaderSaver
 		FileReaderSaver fileSaver = new FileReaderSaver(url, xmlDestinationPath, true);
 		IsoFile isoFile = fileSaver.getIsoFile();
@@ -63,7 +62,7 @@ public class VFT {
 		BoxParserMP4 boxparser = new BoxParserMP4(boxes);
 		boxparser.getBoxes(isoFile, root);
 		//save the content of the container on a xml file using the saveOnFile function of the FileReaderSaver class
-		fileSaver.saveOnFile(document);
+		fileSaver.saveOnFile(new Document(root););
 		return fileSaver.getFilename();
 	}
 	
@@ -72,7 +71,6 @@ public class VFT {
 		Element root = new Element("root");
 		//TODO modelName and phoneBrandName should be read from the console during the parsing phase
 		root.setAttribute("modelName", "phoneBrandName");
-		Document document = new Document(root);
 		//create an ISOFILE using the FileReaderSaver
 		FileReaderSaver fileSaver = new FileReaderSaver(url, xmlDestinationPath, true);
 		IsoFile isoFile = fileSaver.getIsoFile();
@@ -82,7 +80,7 @@ public class VFT {
 		BoxParserMOV boxparser = new BoxParserMOV(boxes);
 		boxparser.getBoxes(isoFile, root);
 		//save the content of the container on a xml file using the saveOnFile function of the FileReaderSaver class
-		fileSaver.saveOnFile(document);
+		fileSaver.saveOnFile(new Document(root););
 		return fileSaver.getFilename();
 	}
 	
