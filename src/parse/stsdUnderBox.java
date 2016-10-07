@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.jdom2.Element;
 
+import com.coremedia.iso.boxes.OriginalFormatBox;
+import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.SampleEntry;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 import com.googlecode.mp4parser.AbstractContainerBox;
+import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
 
 import static util.Util.*;
 
@@ -46,16 +49,56 @@ public abstract class stsdUnderBox {
 	protected String[] getmp4a(String box) {
 		//extract the content of the fiels of the node mp4a from stsd
 		//TODO improve parsing
-    	String[] result = null;   	
+    	String[] result = null;
     	if (contains(box, "{")) {
     		String[] splits = box.split("\\{");
-    		for (String s:splits) {
+    		for (String s: splits) {
     			result = s.split("\\,");
     			//result = append(result, s.split("\\,"));
     		}	
     	}
-    	return result;	
+    	return result;
     }
+	
+	protected String getmp4a_new(AudioSampleEntry ase) {
+		//extract the content of the fields of mp4a node from stsd
+		StringBuilder result = new StringBuilder();
+        result.append("AudioSampleEntry[");
+        result.append("bytesPerSample=").append(ase.getBytesPerSample());
+        result.append(";");
+        result.append("bytesPerFrame=").append(ase.getBytesPerFrame());
+        result.append(";");
+        result.append("bytesPerPacket=").append(ase.getBytesPerPacket());
+        result.append(";");
+        result.append("samplesPerPacket=").append(ase.getSamplesPerPacket());
+        result.append(";");
+        result.append("packetSize=").append(ase.getPacketSize());
+        result.append(";");
+        result.append("compressionId=").append(ase.getCompressionId());
+        result.append(";");
+        result.append("soundVersion=").append(ase.getSoundVersion());
+        result.append(";");
+        result.append("sampleRate=").append(ase.getSampleRate());
+        result.append(";");
+        result.append("sampleSize=").append(ase.getSampleSize());
+        result.append(";");
+        result.append("channelCount=").append(ase.getChannelCount());        
+        result.append("]");
+        return result.toString();
+	}
+	
+	protected String getOriginalFormatBox(OriginalFormatBox box) {
+		//extract the content of the fields of frma node from wave
+		StringBuilder result = new StringBuilder();
+        result.append("OriginalFormatBox[");
+        result.append("dataFormat=").append(box.getDataFormat());
+        result.append("]");
+		return result.toString();
+	}
+	
+	protected String getESDescriptorBox(ESDescriptorBox box) {
+		return box.getDescriptorAsString();
+	}
 	
 	protected String[] extractNameValue(String box) {
 		//return a string vector containing the couple name=value for the input box

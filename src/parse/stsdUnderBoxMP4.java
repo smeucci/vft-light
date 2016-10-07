@@ -5,9 +5,12 @@ import java.util.List;
 import org.jdom2.Element;
 
 import com.coremedia.iso.boxes.Box;
+import com.coremedia.iso.boxes.apple.AppleWaveBox;
+import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.SampleEntry;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 import com.googlecode.mp4parser.AbstractContainerBox;
+import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
 
 public class stsdUnderBoxMP4 extends stsdUnderBox {
 
@@ -24,23 +27,33 @@ public class stsdUnderBoxMP4 extends stsdUnderBox {
     			String str = getavc1((VisualSampleEntry) box);
     			root.addContent(separateNameValue(item, extractNameValue(str)));   				
     			checkIfOptionalBoxes(item, (AbstractContainerBox) box);   
-        	} else {        		  
+        	} else {
+        		//TODO change the same as stsdUnderBoxMOV
         		Element item = new Element(box.getType());
-        		String[] str = getmp4a(box.toString());
-        		root.addContent(separateNameValue(item, str));
+        		//String[] str = getmp4a(box.toString());
+        		String str = getmp4a_new((AudioSampleEntry) box);
+        		root.addContent(separateNameValue(item, extractNameValue(str)));
         		checkIfOptionalBoxes(item, (AbstractContainerBox) box);  
         	}   		
     	}
 	}
     
     protected void checkIfOptionalBoxes(Element item, AbstractContainerBox ab){  
-    	//check if the box stsd contains optional boxes
+    	//check if the box mp4a contains optional boxes
+		String str = null;
+		Element new_item;
 		List<Box> boxes = ab.getBoxes();
-		for (Box box: boxes) {			
-			//System.out.println(); //TODO what does it do?
-			Element new_item = new Element(box.getType());
-			item.addContent(new_item);
-		}   	
+		for (Box box: boxes) {
+			if (box.getType().equals("esds")) {
+				new_item = new Element(box.getType());
+				//str = getESDescriptorBox((ESDescriptorBox) box);
+				//item.addContent(separateNameValue(new_item, extractNameValue(str)));
+				item.addContent(new_item);
+			} else {
+				new_item = new Element(box.getType());
+				item.addContent(new_item);
+			}
+		} 	
     }
 	
 }
