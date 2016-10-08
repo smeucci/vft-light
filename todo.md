@@ -24,8 +24,7 @@ Migliorie libreria VFT
 ISSUES
 ======
 
-- RISOLTO - parserMOV, nel box mvhd i valori sono corretti ma i nomi degli attributi sono sbagliati (compatibleBrand_i del box ftyp al posto dei corretti)
-- parserMOV, nel box minf->stbl->stsd->mp4a l'attributo boxes è pieno invece che vuoto; inoltre tale campo si ripete poco dopo, stavolta nella forma attesa. Fra le due ripetizioni ci sono alcuni boxes vuoti "chan" e "wave". Il primo box mp4a ha il tag di chiusura col nome, mentre quello atteso no.
-In realtà era corretto questo funzionamento. Dipendeva dall'uso precedente di countOccurrences per cercare "{". La guarda era per n == 1, ma in questo caso n era uguale a due. Usando contains il problema è risolto perchè ritorna true se anche n fosse uguale a 2.
-Rimangono comunque degli errori di parsing: solo una parte viene presa e le stringhe non stanno dentro boxes. Splittare prima ; e poi ,
-Errore riga 80 in separateNameValue.
+- usare toString() o i getters è indifferente, la presenza e l'ordine degli attributi dipende sempre dalla libreria utilizzata.
+- non ha senso verificare la presenza dei fields dei box. Tale presenza infatti è determinata dal fatto che ce li metto io per forza, indipendentemente dal come li prendo (toString o get). Tali fields non sembrano neppure essere opzionali: ciò che è opzionale è la presenza e la posizione dei box (ftyp, moov, ecc).
+- considerare i valori dei fields o la loro posizione nel potere discriminante non ha senso; non ho valori di confronto, posso solo dire se i campi e field di omega sono presenti o meno nel container di un video quando faccio il training.
+
