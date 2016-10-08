@@ -5,9 +5,6 @@ import java.util.List;
 import org.jdom2.Element;
 
 import com.coremedia.iso.boxes.Box;
-import com.coremedia.iso.boxes.apple.AppleWaveBox;
-import com.coremedia.iso.boxes.h264.AvcConfigurationBox;
-import com.coremedia.iso.boxes.h264.AvcConfigurationBox.AVCDecoderConfigurationRecord;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.SampleEntry;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
@@ -32,9 +29,8 @@ public class stsdUnderBoxMP4 extends stsdUnderBox {
         	} else {
         		//TODO change the same as stsdUnderBoxMOV
         		Element item = new Element(box.getType());
-        		String[] str = getmp4a(box.toString());
-        		//String str = getmp4a_new((AudioSampleEntry) box);
-        		root.addContent(separateNameValue(item, str));
+        		String str = getmp4a_new((AudioSampleEntry) box);
+        		root.addContent(separateNameValue(item, extractNameValue(str)));
         		checkIfOptionalBoxes(item, (AbstractContainerBox) box);  
         	}   		
     	}

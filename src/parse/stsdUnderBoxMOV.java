@@ -6,15 +6,12 @@ import org.jdom2.Element;
 
 import com.coremedia.iso.boxes.Box;
 import com.coremedia.iso.boxes.OriginalFormatBox;
-import com.coremedia.iso.boxes.UnknownBox;
 import com.coremedia.iso.boxes.apple.AppleWaveBox;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.SampleEntry;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 import com.googlecode.mp4parser.AbstractContainerBox;
 import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
-import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.DecoderConfigDescriptor;
-import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.ESDescriptor;
 
 import static util.Util.*;
 
@@ -40,9 +37,8 @@ public class stsdUnderBoxMOV extends stsdUnderBox {
 			} else if (i == 1) {
 				try {
 					Element item = new Element(box.getType());
-					String[] str = getmp4a(box.toString());
-					//String str = getmp4a_new((AudioSampleEntry) box);
-					root.addContent(separateNameValue(item, str));
+					String str = getmp4a_new((AudioSampleEntry) box);
+					root.addContent(separateNameValue(item, extractNameValue(str)));
 					checkIfOptionalBoxes(item, (AbstractContainerBox) box);
 				} catch (Exception e) {
 					System.out.println("error in mp4a, in underBox");
@@ -80,12 +76,12 @@ public class stsdUnderBoxMOV extends stsdUnderBox {
 		for (Box box: boxes) {
 			if (box.getType().equals("frma")) {
 				new_item = new Element((box.getType()));
-				String[] str = getOriginalFormatBox(box.toString());
-				item.addContent(separateNameValue(new_item, str));
+				String str = getOriginalFormatBox_new((OriginalFormatBox) box);
+				item.addContent(separateNameValue(new_item, extractNameValue(str)));
 			} else if (box.getType().equals("mp4a")) {
 				new_item = new Element((box.getType()));
-				String[] str = getmp4a(box.toString());
-				item.addContent(separateNameValue(new_item, str));
+				String str = getmp4a_new((AudioSampleEntry) box);
+				item.addContent(separateNameValue(new_item, extractNameValue(str)));
 			} else if (box.getType().equals("esds")) {
 				new_item = new Element((box.getType()));
 				String str = getESDescriptorBox((ESDescriptorBox) box);
@@ -97,6 +93,26 @@ public class stsdUnderBoxMOV extends stsdUnderBox {
 				item.addContent(new_item);
 			}
 		}
+	}
+	
+	@Deprecated
+	protected String[] getOriginalFormatBox(String box) {
+		//extract the content of the fields of frma node from wave
+		String[] result = null;
+		if (contains(box, "{") || contains(box, "[")) {
+			String str = box.replaceAll(".*\\[|\\].*", "");
+			result = str.split("\\,");
+		}
+		return result;
+	}
+	
+	protected String getOriginalFormatBox_new(OriginalFormatBox box) {
+		//extract the content of the fields of frma node from wave
+		StringBuilder result = new StringBuilder();
+        result.append("OriginalFormatBox[");
+        result.append("dataFormat=").append(box.getDataFormat());
+        result.append("]");
+		return result.toString();
 	}
 
 }

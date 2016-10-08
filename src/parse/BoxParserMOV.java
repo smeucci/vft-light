@@ -23,26 +23,15 @@ public class BoxParserMOV extends BoxParser {
 		int i = 0; //used by the class stsdUnderBox
 		List<Box> boxes = moov.getBoxes();
 		for (Box box: boxes) {
-			if (box.toString().endsWith("[]") || box.toString().endsWith("]}")) {
-				Element new_item = new Element(box.getType());
-				if (box.getType() == "trak") {
-					try {
-						ab = (AbstractContainerBox) box;
-						recXmlBuilder(new_item, ab, i++);
-						item.addContent(new_item);
-					} catch (Exception e) {
-						System.out.println("Inside if of trak, i am the last node, inside moov");
-					}
-				} else {
-					item.addContent(new_item);
-				}
+			Element new_item = new Element(box.getType());
+			if (box.getType().equals("trak")) {
+				ab = (AbstractContainerBox) box;
+				recXmlBuilder(new_item, ab, i++);
+				item.addContent(new_item);
+			} else if (box.getType().equals("mvhd")) {
+				item.addContent(separateNameValue(new_item, extractNameValue(box.toString())));
 			} else {
-				Element new_item = new Element(box.getType());
-				if (box.getType() == "mvhd") {
-					item.addContent(separateNameValue(new_item, extractNameValue(box.toString())));
-				} else {
-					item.addContent(new_item);
-				}
+				item.addContent(new_item);
 			}
 		}
 	}

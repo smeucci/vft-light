@@ -4,12 +4,10 @@ import java.util.List;
 
 import org.jdom2.Element;
 
-import com.coremedia.iso.boxes.OriginalFormatBox;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.SampleEntry;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 import com.googlecode.mp4parser.AbstractContainerBox;
-import com.googlecode.mp4parser.DataSource;
 import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
 
 import static util.Util.*;
@@ -47,6 +45,7 @@ public abstract class stsdUnderBox {
         return result.toString();
     }
 	
+	@Deprecated
 	protected String[] getmp4a(String box) {
 		//extract the content of the fiels of the node mp4a from stsd
 		//TODO improve parsing
@@ -88,25 +87,6 @@ public abstract class stsdUnderBox {
         result.append("channelCount=").append(ase.getChannelCount());        
         result.append("]");
         return result.toString();
-	}
-	
-	protected String[] getOriginalFormatBox(String box) {
-		//extract the content of the fields of frma node from wave
-		String[] result = null;
-		if (contains(box, "{") || contains(box, "[")) {
-			String str = box.replaceAll(".*\\[|\\].*", "");
-			result = str.split("\\,");
-		}
-		return result;
-	}
-	
-	protected String getOriginalFormatBox_new(OriginalFormatBox box) {
-		//extract the content of the fields of frma node from wave
-		StringBuilder result = new StringBuilder();
-        result.append("OriginalFormatBox[");
-        result.append("dataFormat=").append(box.getDataFormat());
-        result.append("]");
-		return result.toString();
 	}
 	
 	protected String getESDescriptorBox(ESDescriptorBox box) {
