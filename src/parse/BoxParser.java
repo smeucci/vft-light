@@ -46,7 +46,7 @@ public abstract class BoxParser {
 	
 	protected String[] extractNameValue(String box) {
 		//return a string vector containing the couple name=value for the input box
-		String init = removeSquareBrackets(box);		
+		String init = removeBrackets(box, "]");		
 		String[] result = null;
 		String[] splits = init.split("\\[");
 		for (String s: splits) {

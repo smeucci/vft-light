@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 public class Util {
 
-	public static String removeSquareBrackets(String str) {
+	public static String removeBrackets(String str, String bracket) {
 		//remove square brackets from the input string
-		return str.replaceAll("]", "");
+		return str.replaceAll(bracket, "");
 	}
 	
 	public static boolean contains(String text, String token) {

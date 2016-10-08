@@ -6,6 +6,8 @@ import org.jdom2.Element;
 
 import com.coremedia.iso.boxes.Box;
 import com.coremedia.iso.boxes.apple.AppleWaveBox;
+import com.coremedia.iso.boxes.h264.AvcConfigurationBox;
+import com.coremedia.iso.boxes.h264.AvcConfigurationBox.AVCDecoderConfigurationRecord;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.SampleEntry;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
@@ -30,9 +32,9 @@ public class stsdUnderBoxMP4 extends stsdUnderBox {
         	} else {
         		//TODO change the same as stsdUnderBoxMOV
         		Element item = new Element(box.getType());
-        		//String[] str = getmp4a(box.toString());
-        		String str = getmp4a_new((AudioSampleEntry) box);
-        		root.addContent(separateNameValue(item, extractNameValue(str)));
+        		String[] str = getmp4a(box.toString());
+        		//String str = getmp4a_new((AudioSampleEntry) box);
+        		root.addContent(separateNameValue(item, str));
         		checkIfOptionalBoxes(item, (AbstractContainerBox) box);  
         	}   		
     	}
@@ -40,14 +42,14 @@ public class stsdUnderBoxMP4 extends stsdUnderBox {
     
     protected void checkIfOptionalBoxes(Element item, AbstractContainerBox ab){  
     	//check if the box mp4a contains optional boxes
-		String str = null;
 		Element new_item;
 		List<Box> boxes = ab.getBoxes();
 		for (Box box: boxes) {
 			if (box.getType().equals("esds")) {
 				new_item = new Element(box.getType());
-				//str = getESDescriptorBox((ESDescriptorBox) box);
+				String str = getESDescriptorBox((ESDescriptorBox) box);
 				//item.addContent(separateNameValue(new_item, extractNameValue(str)));
+				new_item.setAttribute("stuff", str);
 				item.addContent(new_item);
 			} else {
 				new_item = new Element(box.getType());

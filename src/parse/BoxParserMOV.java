@@ -107,7 +107,7 @@ public class BoxParserMOV extends BoxParser {
 	protected Element hdlrSpecial(Element item, String[] str) {
 		//extract the content of the fields of the node "hdlr" from the IsoFile.
 		try {
-			String[] result = null;			   
+			String[] result = null;
 			for (String s: str) {			
 				result = s.split("\\=");
 				if (result[1].startsWith("Core")) {

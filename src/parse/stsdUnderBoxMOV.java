@@ -40,9 +40,9 @@ public class stsdUnderBoxMOV extends stsdUnderBox {
 			} else if (i == 1) {
 				try {
 					Element item = new Element(box.getType());
-					//String[] str = getmp4a(box.toString());
-					String str = getmp4a_new((AudioSampleEntry) box);
-					root.addContent(separateNameValue(item, extractNameValue(str)));
+					String[] str = getmp4a(box.toString());
+					//String str = getmp4a_new((AudioSampleEntry) box);
+					root.addContent(separateNameValue(item, str));
 					checkIfOptionalBoxes(item, (AbstractContainerBox) box);
 				} catch (Exception e) {
 					System.out.println("error in mp4a, in underBox");
@@ -54,13 +54,12 @@ public class stsdUnderBoxMOV extends stsdUnderBox {
 	//TODO check original (if else)
 	protected void checkIfOptionalBoxes(Element item, AbstractContainerBox ab) {
 		//check if the box mp4a contains optional boxes
-		String str = null;
 		Element new_item;
 		List<Box> boxes = ab.getBoxes();
 		for (Box box: boxes) {
 			if (box.getType().equals("esds")) {
 				new_item = new Element(box.getType());
-				//str = getESDescriptorBox((ESDescriptorBox) box);
+				//String str = getESDescriptorBox((ESDescriptorBox) box);
 				//item.addContent(separateNameValue(new_item, extractNameValue(str)));
 				item.addContent(new_item);
 			} else if (box.getType().equals("wave")) {
@@ -76,22 +75,22 @@ public class stsdUnderBoxMOV extends stsdUnderBox {
 	
 	protected void getAppleWaveBox(Element item, AppleWaveBox wave) {
 		//ectract the content of the field wave insinde mp4a
-		String str = null;
 		Element new_item;
 		List<Box> boxes = wave.getBoxes();
 		for (Box box: boxes) {
 			if (box.getType().equals("frma")) {
 				new_item = new Element((box.getType()));
-				str = getOriginalFormatBox((OriginalFormatBox) box);
-				item.addContent(separateNameValue(new_item, extractNameValue(str)));
+				String[] str = getOriginalFormatBox(box.toString());
+				item.addContent(separateNameValue(new_item, str));
 			} else if (box.getType().equals("mp4a")) {
 				new_item = new Element((box.getType()));
-				str = getmp4a_new((AudioSampleEntry) box);
-				item.addContent(separateNameValue(new_item, extractNameValue(str)));
+				String[] str = getmp4a(box.toString());
+				item.addContent(separateNameValue(new_item, str));
 			} else if (box.getType().equals("esds")) {
 				new_item = new Element((box.getType()));
-				str = getESDescriptorBox((ESDescriptorBox) box);
+				String str = getESDescriptorBox((ESDescriptorBox) box);
 				//item.addContent(separateNameValue(new_item, extractNameValue(str)));
+				new_item.setAttribute("stuff", str);
 				item.addContent(new_item);
 			} else if (box.getType().equals("")){
 				new_item = new Element((box.getType()));

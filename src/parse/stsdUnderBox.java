@@ -9,6 +9,7 @@ import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.SampleEntry;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 import com.googlecode.mp4parser.AbstractContainerBox;
+import com.googlecode.mp4parser.DataSource;
 import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
 
 import static util.Util.*;
@@ -50,12 +51,14 @@ public abstract class stsdUnderBox {
 		//extract the content of the fiels of the node mp4a from stsd
 		//TODO improve parsing
     	String[] result = null;
-    	if (contains(box, "{")) {
-    		String[] splits = box.split("\\{");
-    		for (String s: splits) {
-    			result = s.split("\\,");
-    			//result = append(result, s.split("\\,"));
-    		}	
+    	if (contains(box, "{") || contains(box, "[")) {
+    		String[] splits = box.split(", boxes");
+    		result = splits[0].split("\\,");
+    		for (int i = 0; i < result.length; i++) {
+    			if (contains(result[i], "{") || contains(result[i], "[")) {
+    				result[i] = result[i].split("\\{|\\[")[1]; 				
+    			}
+    		}    		
     	}
     	return result;
     }
@@ -87,7 +90,17 @@ public abstract class stsdUnderBox {
         return result.toString();
 	}
 	
-	protected String getOriginalFormatBox(OriginalFormatBox box) {
+	protected String[] getOriginalFormatBox(String box) {
+		//extract the content of the fields of frma node from wave
+		String[] result = null;
+		if (contains(box, "{") || contains(box, "[")) {
+			String str = box.replaceAll(".*\\[|\\].*", "");
+			result = str.split("\\,");
+		}
+		return result;
+	}
+	
+	protected String getOriginalFormatBox_new(OriginalFormatBox box) {
 		//extract the content of the fields of frma node from wave
 		StringBuilder result = new StringBuilder();
         result.append("OriginalFormatBox[");
@@ -102,10 +115,10 @@ public abstract class stsdUnderBox {
 	
 	protected String[] extractNameValue(String box) {
 		//return a string vector containing the couple name=value for the input box
-		String init = removeSquareBrackets(box);
+		String init = removeBrackets(box, "]");
 		String[] result = null;
 		String[] splits = init.split("\\[");
-		for (String s:splits) {			
+		for (String s: splits) {			
 			result = s.split("\\;");			
 		}		
 		return result;
@@ -116,10 +129,11 @@ public abstract class stsdUnderBox {
 		String[] result = null;			   
 		for (String s: str) {			
 			result = s.split("\\=");					
-			if (result.length == 1) {				
+			if (result.length == 1) {			
 				item.setAttribute(result[0].trim(), "");
-			} else {				
-				item.setAttribute(result[0].trim(), result[1]); //TODO fix problem with special fields
+			} else {
+				//TODO fix problem with special fields
+				item.setAttribute(result[0].trim(), result[1]);
 			}			
 		}			
 		return item;
