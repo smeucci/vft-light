@@ -45,12 +45,7 @@ public abstract class BoxParser {
 	}
 	
 	public void getBoxes_recursive(IsoFile isoFile, AbstractContainerBox ab, Element root) throws Exception {
-		List<Box> boxes;
-		if (ab == null) {
-			boxes = this.boxes;
-		} else {
-			boxes = ab.getBoxes();
-		}
+		List<Box> boxes = (ab == null) ? (this.boxes) : (ab.getBoxes());
 		for (Box box: boxes) {
 			Element item = new Element(sanitize(box.getType()));
 			try {
