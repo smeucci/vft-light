@@ -16,6 +16,11 @@ public class Util {
 		return text.toLowerCase().contains(token.toLowerCase());
 	}
 	
+	public static String sanitize(String str) {
+		str = str.replaceAll("|©", "");
+		return str;
+	}
+	
 	public static String[] append(String[] arr, String[] elements) {
 		if (arr != null) {
 			final int N = arr.length;

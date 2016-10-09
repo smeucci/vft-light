@@ -44,6 +44,24 @@ public abstract class BoxParser {
     	} 
 	}
 	
+	public void getBoxes_new(IsoFile isoFile, AbstractContainerBox ab, Element root) throws Exception {
+		List<Box> boxes;
+		if (ab == null) {
+			boxes = this.boxes;
+		} else {
+			boxes = ab.getBoxes();
+		}
+		for (Box box: boxes) {
+			Element item = new Element(sanitize(box.getType()));
+			try {
+				getBoxes_new(isoFile, (AbstractContainerBox) box, item);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+			root.addContent(item);
+		}
+	}
+	
 	protected String[] extractNameValue(String box) {
 		//return a string vector containing the couple name=value for the input box
 		String init = removeBrackets(box, "]");		
