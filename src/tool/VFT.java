@@ -61,7 +61,7 @@ public class VFT {
 		List<Box> boxes = isoFile.getBoxes();
 		BoxParserMP4 boxparser = new BoxParserMP4(boxes);
 		//boxparser.getBoxes(isoFile, root);
-		boxparser.getBoxes_new(isoFile, null, root); //TODO remove isoFile, pass it to the constructor
+		boxparser.getBoxes_recursive(isoFile, null, root); //TODO remove isoFile, pass it to the constructor
 		//save the content of the container on a xml file using the saveOnFile function of the FileReaderSaver class
 		fileSaver.saveOnFile(new Document(root));
 		return fileSaver.getFilename();
@@ -80,7 +80,7 @@ public class VFT {
 		List<Box> boxes = isoFile.getBoxes();
 		BoxParserMOV boxparser = new BoxParserMOV(boxes);
 		//boxparser.getBoxes(isoFile, root);
-		boxparser.getBoxes_new(isoFile, null, root); //TODO remove isoFile, pass it to the constructor
+		boxparser.getBoxes_recursive(isoFile, null, root); //TODO remove isoFile, pass it to the constructor
 		//save the content of the container on a xml file using the saveOnFile function of the FileReaderSaver class
 		fileSaver.saveOnFile(new Document(root));
 		return fileSaver.getFilename();
