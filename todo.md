@@ -27,4 +27,5 @@ ISSUES
 - usare toString() o i getters è indifferente, la presenza e l'ordine degli attributi dipende sempre dalla libreria utilizzata.
 - non ha senso verificare la presenza dei fields dei box. Tale presenza infatti è determinata dal fatto che ce li metto io per forza, indipendentemente dal come li prendo (toString o get). Tali fields non sembrano neppure essere opzionali: ciò che è opzionale è la presenza e la posizione dei box (ftyp, moov, ecc).
 - considerare i valori dei fields o la loro posizione nel potere discriminante non ha senso; non ho valori di confronto, posso solo dire se i campi e field di omega sono presenti o meno nel container di un video quando faccio il training.
+- considerare i valori dei fields potrebbe avere senso se si crea un descrittore; l'ordine degli attributi sarebbe determinato dal config e ciascun video riempi o no tali fields.
 
