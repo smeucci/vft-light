@@ -1,5 +1,7 @@
 
-import static tool.VFT.parser;
+import static tool.VFT.*;
+
+import java.io.ObjectInputStream.GetField;
 
 public class Main {
 
@@ -15,7 +17,8 @@ public class Main {
 		};
 		String xmlDestinationPath = "/home/saverio/Projects/vft-light/dataset/";
 		
-		parser(urls[0], xmlDestinationPath);
+		//parser(urls[0], xmlDestinationPath);
+		getXmlContainer(urls[0], xmlDestinationPath);
 		
 	}
 	
