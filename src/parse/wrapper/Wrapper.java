@@ -1,4 +1,4 @@
-package parse.boxwrappers;
+package parse.wrappers;
 
 public interface Wrapper {
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.jdom2.Element;
 
-import parse.boxwrappers.*;
+import parse.wrappers.*;
 
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.boxes.Box;

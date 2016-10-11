@@ -1,4 +1,4 @@
-package parse.boxwrappers;
+package parse.wrappers;
 
 import java.util.List;
 

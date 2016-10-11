@@ -1,4 +1,4 @@
-package parse.boxwrappers;
+package parse.wrappers;
 
 import com.googlecode.mp4parser.boxes.apple.CleanApertureAtom;
 import com.googlecode.mp4parser.boxes.apple.TrackEncodedPixelsDimensionsAtom;

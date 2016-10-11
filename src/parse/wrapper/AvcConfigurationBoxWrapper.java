@@ -1,4 +1,4 @@
-package parse.boxwrappers;
+package parse.wrappers;
 
 import com.mp4parser.iso14496.part15.AvcConfigurationBox;
 import com.mp4parser.iso14496.part15.AvcDecoderConfigurationRecord;
