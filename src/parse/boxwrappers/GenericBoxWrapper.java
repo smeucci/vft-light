@@ -2,11 +2,11 @@ package parse.boxwrappers;
 
 import com.googlecode.mp4parser.AbstractFullBox;
 
-public class GenericBoxWrapper<T extends AbstractFullBox> implements Wrapper {
+public class GenericBoxWrapper implements Wrapper {
 
-	private T box;
+	private AbstractFullBox box;
 	
-	public GenericBoxWrapper(T box) {
+	public GenericBoxWrapper(AbstractFullBox box) {
 		this.box = box;
 	}
 	

@@ -58,7 +58,7 @@ public class NewBoxParser {
 				break;
 			case "mvhd": case "tkhd": case "mdhd": case "vmhd": case "smhd":
 			case "stts": case "stss": case "stsc": case "stsz": case "stco":
-				wrapper = new GenericBoxWrapper<AbstractFullBox>((AbstractFullBox) box);
+				wrapper = new GenericBoxWrapper((AbstractFullBox) box);
 				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "clef":
@@ -116,7 +116,7 @@ public class NewBoxParser {
 			case "day":
 				//wrapper = new AppleRecordingYear2BoxWrapper((AppleRecordingYear2Box) box);
 				//separateNameValue(item, extractNameValue(wrapper.toString()));
-				//break;
+				break;
 			default:
 				try {
 					item.setAttribute("stuff", box.toString());
