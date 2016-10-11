@@ -1,4 +1,4 @@
-package parse.wrappers;
+package parse.wrapper;
 
 import com.coremedia.iso.boxes.DataReferenceBox;
 import com.coremedia.iso.boxes.MetaBox;

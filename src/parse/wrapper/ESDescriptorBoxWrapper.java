@@ -1,4 +1,4 @@
-package parse.wrappers;
+package parse.wrapper;
 
 import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
 
