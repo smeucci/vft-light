@@ -120,7 +120,7 @@ public class NewBoxParser {
 				try {
 					item.setAttribute("stuff", box.toString());
 				} catch (Exception e) {
-					item.setAttribute("stuff", "unknown");
+					item.setAttribute("stuff", "null");
 				}
 				break;
 			}
