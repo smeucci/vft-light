@@ -113,8 +113,9 @@ public class NewBoxParser {
 				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "day":
-				wrapper = new AppleRecordingYear2BoxWrapper((AppleRecordingYear2Box) box);
+				//wrapper = new AppleRecordingYear2BoxWrapper((AppleRecordingYear2Box) box);
 				//separateNameValue(item, extractNameValue(wrapper.toString()));
+				//break;
 			default:
 				try {
 					item.setAttribute("stuff", box.toString());
