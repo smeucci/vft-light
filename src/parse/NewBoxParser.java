@@ -37,10 +37,11 @@ public class NewBoxParser {
 	
 	public void getBoxes(AbstractContainerBox ab, Element root) throws Exception {
 		List<Box> boxes = (ab == null) ? (this.isoFile.getBoxes()) : (ab.getBoxes());
+		Element item;
+		Wrapper wrapper;
 		for (Box box: boxes) {
 			String boxType = sanitize(box.getType());
 			
-			Element item;
 			try {
 				item = new Element(boxType);
 			} catch (Exception e) {
@@ -56,49 +57,64 @@ public class NewBoxParser {
 				break;
 			case "mvhd": case "tkhd": case "mdhd": case "vmhd": case "smhd":
 			case "stts": case "stss": case "stsc": case "stsz": case "stco":
-				separateNameValue(item, extractNameValue(new GenericBoxWrapper<AbstractFullBox>((AbstractFullBox) box).toString()));
+				wrapper = new GenericBoxWrapper<AbstractFullBox>((AbstractFullBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "clef":
-				separateNameValue(item, extractNameValue(new GenericAtomWrapper((CleanApertureAtom) box).toString()));
+				wrapper = new GenericAtomWrapper((CleanApertureAtom) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "prof":
-				separateNameValue(item, extractNameValue(new GenericAtomWrapper((TrackProductionApertureDimensionsAtom) box).toString()));
+				wrapper = new GenericAtomWrapper((TrackProductionApertureDimensionsAtom) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "enof":
-				separateNameValue(item, extractNameValue(new GenericAtomWrapper((TrackEncodedPixelsDimensionsAtom) box).toString()));
+				wrapper = new GenericAtomWrapper((TrackEncodedPixelsDimensionsAtom) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "elst":
-				separateNameValue(item, extractNameValue(new EditListBoxWrapper((EditListBox) box).toString()));
+				wrapper = new EditListBoxWrapper((EditListBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "hdlr":
-				separateNameValue(item, extractNameValue(new HandlerBoxWrapper((HandlerBox) box).toString()));
+				wrapper = new HandlerBoxWrapper((HandlerBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "dref":
-				separateNameValue(item, extractNameValue(new GenericContainerBoxWrapper((DataReferenceBox) box).toString()));
+				wrapper = new GenericContainerBoxWrapper((DataReferenceBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "stsd":
-				separateNameValue(item, extractNameValue(new GenericContainerBoxWrapper((SampleDescriptionBox) box).toString()));
+				wrapper = new GenericContainerBoxWrapper((SampleDescriptionBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "avc1":
-				separateNameValue(item, extractNameValue(new VisualSampleEntryWrapper((VisualSampleEntry) box).toString()));
+				wrapper = new VisualSampleEntryWrapper((VisualSampleEntry) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "avcC":
-				separateNameValue(item, extractNameValue(new AvcConfigurationBoxWrapper((AvcConfigurationBox) box).toString()));
+				wrapper = new AvcConfigurationBoxWrapper((AvcConfigurationBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "sdtp":
-				separateNameValue(item, extractNameValue(new SampleDependencyTypeBoxWrapper((SampleDependencyTypeBox) box).toString()));
+				wrapper = new SampleDependencyTypeBoxWrapper((SampleDependencyTypeBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "meta":
-				separateNameValue(item, extractNameValue(new GenericContainerBoxWrapper((MetaBox) box).toString()));
+				wrapper = new GenericContainerBoxWrapper((MetaBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "mp4a":
-				separateNameValue(item, extractNameValue(new AudioSampleEntryWrapper((AudioSampleEntry) box).toString()));
+				wrapper = new AudioSampleEntryWrapper((AudioSampleEntry) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "esds":
-				separateNameValue(item, extractNameValue(new ESDescriptorBoxWrapper((ESDescriptorBox) box).toString()));
+				wrapper = new ESDescriptorBoxWrapper((ESDescriptorBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "day":
-				//separateNameValue(item, extractNameValue(new AppleRecordingYear2BoxWrapper((AppleRecordingYear2Box) box).toString()));
+				wrapper = new AppleRecordingYear2BoxWrapper((AppleRecordingYear2Box) box);
+				//separateNameValue(item, extractNameValue(wrapper.toString()));
 			default:
 				try {
 					item.setAttribute("stuff", box.toString());

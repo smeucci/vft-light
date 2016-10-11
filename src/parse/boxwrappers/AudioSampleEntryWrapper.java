@@ -2,7 +2,7 @@ package parse.boxwrappers;
 
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 
-public class AudioSampleEntryWrapper {
+public class AudioSampleEntryWrapper implements Wrapper {
 
 	private AudioSampleEntry mp4a;
 	

@@ -2,7 +2,7 @@ package parse.boxwrappers;
 
 import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
 
-public class ESDescriptorBoxWrapper {
+public class ESDescriptorBoxWrapper implements Wrapper {
 
 	private ESDescriptorBox esds;
 	
@@ -12,7 +12,7 @@ public class ESDescriptorBoxWrapper {
 	
 	public String toString() {
 		String result = "";
-		String descr = esds.getDescriptorAsString().replaceAll("\\}|\\[\\[\\]\\]", "");
+		String descr = this.esds.getDescriptorAsString().replaceAll("\\}|\\[\\[\\]\\]", "");
 		String[] splits = descr.split("ESDescriptor\\{"
 				+ "|decoderConfigDescriptor=DecoderConfigDescriptor\\{"
 				+ "|audioSpecificInfo=AudioSpecificConfig\\{"

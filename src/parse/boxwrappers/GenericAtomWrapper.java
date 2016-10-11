@@ -4,7 +4,7 @@ import com.googlecode.mp4parser.boxes.apple.CleanApertureAtom;
 import com.googlecode.mp4parser.boxes.apple.TrackEncodedPixelsDimensionsAtom;
 import com.googlecode.mp4parser.boxes.apple.TrackProductionApertureDimensionsAtom;
 
-public class GenericAtomWrapper {
+public class GenericAtomWrapper implements Wrapper {
 
 	private CleanApertureAtom clef;
 	private TrackProductionApertureDimensionsAtom prof;

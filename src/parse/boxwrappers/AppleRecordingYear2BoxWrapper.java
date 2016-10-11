@@ -2,7 +2,7 @@ package parse.boxwrappers;
 
 import com.googlecode.mp4parser.boxes.apple.AppleRecordingYear2Box;
 
-public class AppleRecordingYear2BoxWrapper {
+public class AppleRecordingYear2BoxWrapper implements Wrapper {
 
 	private AppleRecordingYear2Box day;
 	
@@ -23,6 +23,6 @@ public class AppleRecordingYear2BoxWrapper {
 		result.append(";");
 		result.append("value=").append(this.day.getValue());
 		result.append("]");
-		return result.toString();		
+		return result.toString();	
 	}
 }

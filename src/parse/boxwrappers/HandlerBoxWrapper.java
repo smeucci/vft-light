@@ -2,7 +2,7 @@ package parse.boxwrappers;
 
 import com.coremedia.iso.boxes.HandlerBox;
 
-public class HandlerBoxWrapper {
+public class HandlerBoxWrapper implements Wrapper {
 
 	private HandlerBox hdlr;
 	

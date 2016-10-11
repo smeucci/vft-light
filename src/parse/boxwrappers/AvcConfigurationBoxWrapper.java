@@ -3,7 +3,7 @@ package parse.boxwrappers;
 import com.mp4parser.iso14496.part15.AvcConfigurationBox;
 import com.mp4parser.iso14496.part15.AvcDecoderConfigurationRecord;
 
-public class AvcConfigurationBoxWrapper {
+public class AvcConfigurationBoxWrapper implements Wrapper {
 
 	private AvcConfigurationBox avcC;
 	

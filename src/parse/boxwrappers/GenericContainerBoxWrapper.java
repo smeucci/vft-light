@@ -4,7 +4,7 @@ import com.coremedia.iso.boxes.DataReferenceBox;
 import com.coremedia.iso.boxes.MetaBox;
 import com.coremedia.iso.boxes.SampleDescriptionBox;
 
-public class GenericContainerBoxWrapper {
+public class GenericContainerBoxWrapper implements Wrapper {
 
 	private DataReferenceBox dref;
 	private SampleDescriptionBox stsd;

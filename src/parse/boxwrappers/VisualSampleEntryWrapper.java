@@ -2,7 +2,7 @@ package parse.boxwrappers;
 
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 
-public class VisualSampleEntryWrapper {
+public class VisualSampleEntryWrapper implements Wrapper {
 
 	private VisualSampleEntry avc1;
 	

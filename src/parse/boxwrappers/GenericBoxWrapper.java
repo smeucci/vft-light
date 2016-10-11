@@ -2,7 +2,7 @@ package parse.boxwrappers;
 
 import com.googlecode.mp4parser.AbstractFullBox;
 
-public class GenericBoxWrapper<T extends AbstractFullBox> {
+public class GenericBoxWrapper<T extends AbstractFullBox> implements Wrapper {
 
 	private T box;
 	
@@ -14,9 +14,9 @@ public class GenericBoxWrapper<T extends AbstractFullBox> {
 		StringBuilder result = new StringBuilder();
 		result.append(box.toString().replaceAll("\\]|\\}", ""));
 		result.append(";");
-		result.append("version=").append(box.getVersion());
+		result.append("version=").append(this.box.getVersion());
 		result.append(";");
-		result.append("flags=").append(box.getFlags());
+		result.append("flags=").append(this.box.getFlags());
 		result.append("]");
 		return result.toString();		
 	}

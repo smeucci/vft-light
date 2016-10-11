@@ -2,7 +2,7 @@ package parse.boxwrappers;
 
 import com.coremedia.iso.boxes.OriginalFormatBox;
 
-public class OriginaFormatBoxWrapper {
+public class OriginaFormatBoxWrapper implements Wrapper {
 
 	private OriginalFormatBox frma;
 	

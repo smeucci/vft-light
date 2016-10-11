@@ -3,7 +3,7 @@ package parse.boxwrappers;
 import com.coremedia.iso.boxes.EditListBox;
 import com.coremedia.iso.boxes.EditListBox.Entry;
 
-public class EditListBoxWrapper {
+public class EditListBoxWrapper implements Wrapper {
 
 	private EditListBox elst;
 	
