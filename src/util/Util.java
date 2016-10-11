@@ -17,7 +17,7 @@ public class Util {
 	}
 	
 	public static String sanitize(String str) {
-		str = str.replaceAll("|©", "");
+		str = str.replaceAll("|©|", "");
 		return str;
 	}
 	

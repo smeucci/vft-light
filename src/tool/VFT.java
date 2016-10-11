@@ -1,31 +1,13 @@
 package tool;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
-import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.boxes.Box;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-
-
-//import designResultTree.*;
 import io.*;
 import parse.*;
 import static util.Util.*;
