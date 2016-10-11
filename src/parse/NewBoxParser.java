@@ -37,10 +37,11 @@ public class NewBoxParser {
 	
 	public void getBoxes(AbstractContainerBox ab, Element root) throws Exception {
 		List<Box> boxes = (ab == null) ? (this.isoFile.getBoxes()) : (ab.getBoxes());
-		Element item;
-		Wrapper wrapper;
+		
 		for (Box box: boxes) {
 			String boxType = sanitize(box.getType());
+			Element item;
+			Wrapper wrapper;
 			
 			try {
 				item = new Element(boxType);
