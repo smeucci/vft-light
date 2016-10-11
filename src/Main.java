@@ -14,7 +14,6 @@ public class Main {
 				"/media/saverio/DATA/dataset-righini/videos/ipadmini_marco/indoor/uni_move_1.MOV"};
 		String xmlDestinationPath = "/home/saverio/Projects/vft-light/dataset/";
 		
-		//parser(urls[0], xmlDestinationPath);
 		getXmlContainer(urls[0], xmlDestinationPath);
 		
 	}

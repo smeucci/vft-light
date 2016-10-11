@@ -1,71 +1,155 @@
 package parse;
 
+import static util.Util.*;
+
 import java.util.List;
 
 import org.jdom2.Element;
 
+import parse.boxwrappers.*;
+
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.boxes.Box;
 import com.coremedia.iso.boxes.DataReferenceBox;
-import com.coremedia.iso.boxes.MovieBox;
+import com.coremedia.iso.boxes.EditListBox;
+import com.coremedia.iso.boxes.HandlerBox;
+import com.coremedia.iso.boxes.MetaBox;
+import com.coremedia.iso.boxes.SampleDependencyTypeBox;
 import com.coremedia.iso.boxes.SampleDescriptionBox;
+import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
+import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 import com.googlecode.mp4parser.AbstractContainerBox;
+import com.googlecode.mp4parser.AbstractFullBox;
+import com.googlecode.mp4parser.boxes.apple.AppleRecordingYear2Box;
+import com.googlecode.mp4parser.boxes.apple.CleanApertureAtom;
+import com.googlecode.mp4parser.boxes.apple.TrackEncodedPixelsDimensionsAtom;
+import com.googlecode.mp4parser.boxes.apple.TrackProductionApertureDimensionsAtom;
+import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
+import com.mp4parser.iso14496.part15.AvcConfigurationBox;
 
-import static util.Util.*;
+public class BoxParser {
 
-public abstract class BoxParser {
+	private IsoFile isoFile;
 	
-	protected List<Box> boxes;
+	public BoxParser(IsoFile isoFile) {
+		this.isoFile = isoFile;
+	}
 	
-	//abstract class
-	protected abstract void moovPrint(Element item, MovieBox moov);
-	
-	protected abstract void recXmlBuilder(Element item, AbstractContainerBox ab, int i);
-	
-	//concrete class
-	public void getBoxes(IsoFile isoFile, Element root) throws Exception {
-		//insert in root the content of the container, contained in isoFile
-		for (Box box: this.boxes) {
-    		if (box.getType() == "ftyp") {
-    			Element item = new Element(box.getType());
-    			root.addContent(separateNameValueSpecial(item, extractNameValue(box.toString()))); 			
-			} else if (box.getType() == "moov") {
-				Element item = new Element(box.getType());	
-				MovieBox moov = isoFile.getMovieBox();
-				if (moov != null) {
-					//since it is the main unit of the container, a dedicated function will be used
-					moovPrint(item, moov);
-				}	 
-				root.addContent(item);	    		    				
-			} else {				
-				Element item = new Element(box.getType());  
-				root.addContent(item);	
+	public void getBoxes(AbstractContainerBox ab, Element root) throws Exception {
+		List<Box> boxes = (ab == null) ? (this.isoFile.getBoxes()) : (ab.getBoxes());
+		
+		for (Box box: boxes) {
+			String boxType = sanitize(box.getType());
+			Element item;
+			Wrapper wrapper;
+			
+			try {
+				item = new Element(boxType);
+			} catch (Exception e) {
+				item = new Element("unknown");
 			}
-    	} 
+			
+			switch (boxType) {
+			case "ftyp":
+				separateNameValueSpecial(item, extractNameValue(box.toString()));
+				break;
+			case "mdat": case "frma":
+				separateNameValue(item, extractNameValue(box.toString()));
+				break;
+			case "mvhd": case "tkhd": case "mdhd": case "vmhd": case "smhd":
+			case "stts": case "stss": case "stsc": case "stsz": case "stco":
+				wrapper = new GenericBoxWrapper((AbstractFullBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			case "clef":
+				wrapper = new GenericAtomWrapper((CleanApertureAtom) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			case "prof":
+				wrapper = new GenericAtomWrapper((TrackProductionApertureDimensionsAtom) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			case "enof":
+				wrapper = new GenericAtomWrapper((TrackEncodedPixelsDimensionsAtom) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			case "elst":
+				wrapper = new EditListBoxWrapper((EditListBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			case "hdlr":
+				wrapper = new HandlerBoxWrapper((HandlerBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			case "dref":
+				wrapper = new GenericContainerBoxWrapper((DataReferenceBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			case "stsd":
+				wrapper = new GenericContainerBoxWrapper((SampleDescriptionBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			case "avc1":
+				wrapper = new VisualSampleEntryWrapper((VisualSampleEntry) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			case "avcC":
+				wrapper = new AvcConfigurationBoxWrapper((AvcConfigurationBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			case "sdtp":
+				wrapper = new SampleDependencyTypeBoxWrapper((SampleDependencyTypeBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			case "meta":
+				wrapper = new GenericContainerBoxWrapper((MetaBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			case "mp4a":
+				wrapper = new AudioSampleEntryWrapper((AudioSampleEntry) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			case "esds":
+				wrapper = new ESDescriptorBoxWrapper((ESDescriptorBox) box);
+				separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			case "day":
+				//wrapper = new AppleRecordingYear2BoxWrapper((AppleRecordingYear2Box) box);
+				//separateNameValue(item, extractNameValue(wrapper.toString()));
+				break;
+			default:
+				try {
+					item.setAttribute("stuff", box.toString());
+				} catch (Exception e) {
+					item.setAttribute("stuff", "null");
+				}
+				break;
+			}
+			
+			if (box instanceof AbstractContainerBox) {
+				getBoxes((AbstractContainerBox) box, item);
+			}
+			root.addContent(item);
+		}
 	}
 	
-	protected String[] extractNameValue(String box) {
+	protected String[] extractNameValue(String str) {
 		//return a string vector containing the couple name=value for the input box
-		String init = removeBrackets(box, "]");		
-		String[] result = null;
-		String[] splits = init.split("\\[");
-		for (String s: splits) {
-			result = s.split("\\;");			
-		}		
-		return result;
+		String init = removeBrackets(removeBrackets(str, "}"), "]");
+		return init.split("\\[|\\{")[1].split("\\;|\\,");
 	}
 	
-	protected Element separateNameValue(Element item, String[] str) {
+	protected void separateNameValue(Element item, String[] str) {
 		//return an item with attributes in the form of name="value"
 		String[] result = null;			   
 		for (String s: str) {			
 			result = s.split("\\=");
-			item.setAttribute(result[0], result[1]);
+			String value = (result.length == 1) ? "null" : result[1];
+			item.setAttribute(result[0].trim(), value);
 		}			
-		return item;
 	}
 	
-	protected Element separateNameValueSpecial(Element item, String[] str) {
+	protected void separateNameValueSpecial(Element item, String[] str) {
 		//return an item with attributes in the form of name="value"
 		String[] result = null;			
 		for (int i = 0; i < str.length; i++) {
@@ -73,35 +157,12 @@ public abstract class BoxParser {
 			if (i > 1) {
 				//this control on index i was added for the ftyp box because the field
 				// compatibleBrand is a list of compatible brands
-				String name = "compatibleBrand_" + (i - 1);
-				item.setAttribute(name, result[1]);
+				String name = result[0] + "_" + (i - 1);
+				item.setAttribute(name.trim(), result[1]);
 			} else {		
-				item.setAttribute(result[0], result[1]);
+				item.setAttribute(result[0].trim(), result[1]);
 			}
 		}
-		return item;
 	}
-	
-	protected String extractDataReferenceBox(DataReferenceBox db) {
-		//extract from the Isofile the content of the fields of the node "dref"
-    	StringBuilder result = new StringBuilder();
-        result.append("DataReferenceBox[");
-        result.append("version=").append(db.getVersion());
-        result.append(";");
-        result.append("flags=").append(db.getFlags());
-        result.append("]");
-        return result.toString();
-    }
-	
-    protected String extractSampleDescriptionBox(SampleDescriptionBox stsd) {
-    	//extract fromt the IsoFile the content of the fields of the node "stsd"
-    	StringBuilder result = new StringBuilder();
-        result.append("SampleDescriptionBox[");
-        result.append("version=").append(stsd.getVersion());
-        result.append(";");
-        result.append("flags=").append(stsd.getFlags());
-        result.append("]");
-		return result.toString();
-    }	
 	
 }
