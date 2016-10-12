@@ -18,7 +18,7 @@ public class Util {
 	
 	public static String sanitize(String str) {
 		str = str.replaceAll("|©|", "");
-		return str;
+		return str.trim();
 	}
 	
 	public static String[] append(String[] arr, String[] elements) {

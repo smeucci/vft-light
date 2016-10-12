@@ -10,20 +10,13 @@ import parse.wrapper.*;
 
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.boxes.Box;
-import com.coremedia.iso.boxes.DataReferenceBox;
 import com.coremedia.iso.boxes.EditListBox;
 import com.coremedia.iso.boxes.HandlerBox;
-import com.coremedia.iso.boxes.MetaBox;
 import com.coremedia.iso.boxes.SampleDependencyTypeBox;
-import com.coremedia.iso.boxes.SampleDescriptionBox;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 import com.googlecode.mp4parser.AbstractContainerBox;
 import com.googlecode.mp4parser.AbstractFullBox;
-import com.googlecode.mp4parser.boxes.apple.AppleRecordingYear2Box;
-import com.googlecode.mp4parser.boxes.apple.CleanApertureAtom;
-import com.googlecode.mp4parser.boxes.apple.TrackEncodedPixelsDimensionsAtom;
-import com.googlecode.mp4parser.boxes.apple.TrackProductionApertureDimensionsAtom;
 import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
 import com.mp4parser.iso14496.part15.AvcConfigurationBox;
 
@@ -46,7 +39,7 @@ public class BoxParser {
 			try {
 				item = new Element(boxType);
 			} catch (Exception e) {
-				item = new Element("unknown");
+				item = new Element("unkn");
 			}
 			
 			switch (boxType) {
@@ -61,16 +54,8 @@ public class BoxParser {
 				wrapper = new GenericBoxWrapper((AbstractFullBox) box);
 				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
-			case "clef":
-				wrapper = new GenericAtomWrapper((CleanApertureAtom) box);
-				separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
-			case "prof":
-				wrapper = new GenericAtomWrapper((TrackProductionApertureDimensionsAtom) box);
-				separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
-			case "enof":
-				wrapper = new GenericAtomWrapper((TrackEncodedPixelsDimensionsAtom) box);
+			case "clef": case "prof": case "enof":
+				wrapper = new GenericAtomWrapper((AbstractFullBox) box);
 				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "elst":
@@ -81,12 +66,8 @@ public class BoxParser {
 				wrapper = new HandlerBoxWrapper((HandlerBox) box);
 				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
-			case "dref":
-				wrapper = new GenericContainerBoxWrapper((DataReferenceBox) box);
-				separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
-			case "stsd":
-				wrapper = new GenericContainerBoxWrapper((SampleDescriptionBox) box);
+			case "dref": case "stsd": case "meta":
+				wrapper = new GenericContainerBoxWrapper((AbstractContainerBox) box);
 				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
 			case "avc1":
@@ -101,10 +82,6 @@ public class BoxParser {
 				wrapper = new SampleDependencyTypeBoxWrapper((SampleDependencyTypeBox) box);
 				separateNameValue(item, extractNameValue(wrapper.toString()));
 				break;
-			case "meta":
-				wrapper = new GenericContainerBoxWrapper((MetaBox) box);
-				separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
 			case "mp4a":
 				wrapper = new AudioSampleEntryWrapper((AudioSampleEntry) box);
 				separateNameValue(item, extractNameValue(wrapper.toString()));
@@ -116,7 +93,7 @@ public class BoxParser {
 			case "day":
 				//wrapper = new AppleRecordingYear2BoxWrapper((AppleRecordingYear2Box) box);
 				//separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
+				//break;
 			default:
 				try {
 					item.setAttribute("stuff", box.toString());

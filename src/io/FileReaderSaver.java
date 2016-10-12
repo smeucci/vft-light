@@ -3,10 +3,18 @@ package io;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Attribute;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+
+import tree.*;
 
 import com.coremedia.iso.IsoFile;
 
@@ -18,7 +26,6 @@ public class FileReaderSaver {
 	private String sourcePath;
 	private String destinationPath;
 	
-	//TODO implement saving for resultTree, not the objective of vft-light
 	public FileReaderSaver(String url, String xmlDestinationPath, boolean op) {
 		this.url = url;
 		if (op) {
@@ -66,6 +73,12 @@ public class FileReaderSaver {
 			tmp = noName.concat("/" + splits[i]);
 		}
 		this.sourcePath = tmp;
+	}
+	
+	public Document getDocumentFromXMLFile() throws JDOMException, IOException {
+		//create a SAXBuilder and a document
+		SAXBuilder builder = new SAXBuilder();
+		return builder.build(new File(this.url));
 	}
 	
 }

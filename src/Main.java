@@ -14,7 +14,11 @@ public class Main {
 				"/media/saverio/DATA/dataset-righini/videos/ipadmini_marco/indoor/uni_move_1.MOV"};
 		String xmlDestinationPath = "/home/saverio/Projects/vft-light/dataset/";
 		
-		getXmlContainer(urls[0], xmlDestinationPath);
+		//getXmlContainer(urls[0], xmlDestinationPath);
+		
+		String url = "/home/saverio/Projects/vft-light/dataset/garden_move_1.MOV.xml";
+		//buildTreeFromXML(url, xmlDestinationPath);
+		drawTree(url, xmlDestinationPath, "test");
 		
 	}
 	

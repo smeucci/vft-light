@@ -3,42 +3,27 @@ package parse.wrapper;
 import com.coremedia.iso.boxes.DataReferenceBox;
 import com.coremedia.iso.boxes.MetaBox;
 import com.coremedia.iso.boxes.SampleDescriptionBox;
+import com.googlecode.mp4parser.AbstractContainerBox;
 
 public class GenericContainerBoxWrapper implements Wrapper {
 
-	private DataReferenceBox dref;
-	private SampleDescriptionBox stsd;
-	private MetaBox meta;
+	private AbstractContainerBox box;
 	
-	public GenericContainerBoxWrapper(DataReferenceBox box) {
-		this.dref = box;
-		this.stsd = null;
-		this.meta = null;
-	}
-	
-	public GenericContainerBoxWrapper(SampleDescriptionBox box) {
-		this.dref = null;
-		this.stsd = box;
-		this.meta = null;
-	}
-	
-	public GenericContainerBoxWrapper(MetaBox box) {
-		this.dref = null;
-		this.stsd = null;
-		this.meta = box;
+	public GenericContainerBoxWrapper(AbstractContainerBox box) {
+		this.box = box;
 	}
 	
 	public String toString() {
 		int version = 0, flags = 0;
-		if (this.dref != null) {
-			version = this.dref.getVersion();
-			flags = this.dref.getFlags();
-		} else if (this.stsd != null) {
-			version = this.stsd.getVersion();
-			flags = this.stsd.getFlags();
-		} else if (this.meta != null) {
-			version = this.meta.getVersion();
-			flags = this.meta.getFlags();
+		if (box instanceof DataReferenceBox) {
+			version = ((DataReferenceBox) this.box).getVersion();
+			flags = ((DataReferenceBox) this.box).getFlags();
+		} else if (box instanceof SampleDescriptionBox) {
+			version = ((SampleDescriptionBox) this.box).getVersion();
+			flags = ((SampleDescriptionBox) this.box).getFlags();
+		} else if (box instanceof MetaBox) {
+			version = ((MetaBox) this.box).getVersion();
+			flags = ((MetaBox) this.box).getFlags();
 		}
 		
 		StringBuilder result = new StringBuilder();

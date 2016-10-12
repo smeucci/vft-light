@@ -1,51 +1,36 @@
 package parse.wrapper;
 
+import com.googlecode.mp4parser.AbstractFullBox;
 import com.googlecode.mp4parser.boxes.apple.CleanApertureAtom;
 import com.googlecode.mp4parser.boxes.apple.TrackEncodedPixelsDimensionsAtom;
 import com.googlecode.mp4parser.boxes.apple.TrackProductionApertureDimensionsAtom;
 
 public class GenericAtomWrapper implements Wrapper {
 
-	private CleanApertureAtom clef;
-	private TrackProductionApertureDimensionsAtom prof;
-	private TrackEncodedPixelsDimensionsAtom enof;
+	private AbstractFullBox box;
 	
-	public GenericAtomWrapper(CleanApertureAtom atom) {
-		this.clef = atom;
-		this.prof = null;
-		this.enof = null;
-	}
-	
-	public GenericAtomWrapper(TrackProductionApertureDimensionsAtom atom) {
-		this.clef = null;
-		this.prof = atom;
-		this.enof = null;
-	}
-	
-	public GenericAtomWrapper(TrackEncodedPixelsDimensionsAtom atom) {
-		this.clef = null;
-		this.prof = null;
-		this.enof = atom;
+	public GenericAtomWrapper(AbstractFullBox box) {
+		this.box = box;
 	}
 	
 	public String toString() {
 		double width = 0, height = 0;
 		int version = 0, flags = 0;
-		if (this.clef != null) {
-			width = this.clef.getWidth();
-			height = this.clef.getHeight();
-			version = this.clef.getVersion();
-			flags = this.clef.getFlags();
-		} else if (this.prof != null) {
-			width = this.prof.getWidth();
-			height = this.prof.getHeight();
-			version = this.prof.getVersion();
-			flags = this.prof.getFlags();
-		} else if (this.enof != null) {
-			width = this.enof.getWidth();
-			height = this.enof.getHeight();
-			version = this.enof.getVersion();
-			flags = this.enof.getFlags();
+		if (box instanceof CleanApertureAtom) {
+			width = ((CleanApertureAtom) this.box).getWidth();
+			height = ((CleanApertureAtom) this.box).getHeight();
+			version = ((CleanApertureAtom) this.box).getVersion();
+			flags = ((CleanApertureAtom) this.box).getFlags();
+		} else if (box instanceof TrackProductionApertureDimensionsAtom) {
+			width = ((TrackProductionApertureDimensionsAtom) this.box).getWidth();
+			height = ((TrackProductionApertureDimensionsAtom) this.box).getHeight();
+			version = ((TrackProductionApertureDimensionsAtom) this.box).getVersion();
+			flags = ((TrackProductionApertureDimensionsAtom) this.box).getFlags();
+		} else if (box instanceof TrackEncodedPixelsDimensionsAtom) {
+			width = ((TrackEncodedPixelsDimensionsAtom) this.box).getWidth();
+			height = ((TrackEncodedPixelsDimensionsAtom) this.box).getHeight();
+			version = ((TrackEncodedPixelsDimensionsAtom) this.box).getVersion();
+			flags = ((TrackEncodedPixelsDimensionsAtom) this.box).getFlags();
 		}
 		
 		StringBuilder result = new StringBuilder();
