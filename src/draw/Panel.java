@@ -62,8 +62,8 @@ public class Panel extends JPanel {
 			g.drawArc(x_start, y_start, 5, 5, 0, 360);
 
 			String str = node.getName();
-			g.setFont(new Font("medium", Font.PLAIN, 8));
-			g.drawString("" +  node.getID() + "", x_start - 10, y_start - 12);
+			//g.setFont(new Font("medium", Font.PLAIN, 8));
+			//g.drawString("" +  node.getID() + "", x_start - 10, y_start - 12);
 			g.setFont(new Font("SansSerif", Font.BOLD, 10));
 			g.drawString(str, x_start - 10, y_start - 5); 
 			
