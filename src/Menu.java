@@ -1,14 +1,10 @@
 
 import static tool.VFT.*;
 
-import java.util.Comparator;
-
 import org.apache.commons.cli.*;
 
 public class Menu {
 
-	public static String parse;
-	public static String draw;
 	public static String input;
 	public static String output;
 	
@@ -52,7 +48,7 @@ public class Menu {
 		opts.addOption(output_opt);
 		
 		CommandLine cl = null;
-		HelpFormatter formatter = buildHelpFormatter();
+		HelpFormatter formatter = new HelpFormatter();
 	    try {
 	        cl = new DefaultParser().parse(opts, args);
 	    } catch (ParseException e) {
@@ -80,22 +76,6 @@ public class Menu {
 	        System.exit(0);
 	    }
 	    return cl;
-	}
-	
-	private static HelpFormatter buildHelpFormatter() {
-		HelpFormatter formatter = new HelpFormatter();
-		formatter.setOptionComparator(new Comparator<Option>() {
-			
-			@Override
-			public int compare(Option o1, Option o2) {
-				if (o1.hasArg() == false) {
-					return o1.getId();
-				}
-				return o1.getLongOpt().compareToIgnoreCase(o2.getLongOpt());
-			}
-			
-		});
-		return formatter;
 	}
 
 }
