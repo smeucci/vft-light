@@ -1,6 +1,5 @@
 package tool;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.List;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
 
 import com.coremedia.iso.IsoFile;
 
@@ -22,11 +20,17 @@ import tree.Tree;
 
 public class VFT {
 	 
-	public static String getXmlContainer(String url, String xmlDestinationPath) throws Exception {
+	private static int id = 0;
+	
+	public static String parse(String url, String xmlDestinationPath) throws Exception {
 		String filename = null;
 		try {
-			filename = parser(url, xmlDestinationPath);
-			System.out.println("XML file '" + filename + ".xml' created.");
+			if (!url.endsWith(".xml")) {
+				filename = parser(url, xmlDestinationPath);
+				System.out.println("XML file '" + xmlDestinationPath + "/" + filename + ".xml' created.");
+			} else {
+				System.err.println("Wrong input format. The input file should be a video file (mp4 or mov).");
+			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.out.println("Could not parse video: " + url);
@@ -49,17 +53,25 @@ public class VFT {
 		return fileSaver.getFilename();
 	}
 	
+	public static void draw(String url, String xmlDestinationPath, String name) throws Exception {
+		if (url.endsWith(".xml")) {
+			Tree tree = buildTreeFromXML(url, xmlDestinationPath);
+			Painter.painter(tree, 1200, 600, name);
+		} else {
+			System.err.println("Wrong input format. The input file should be a xml file.");
+		}
+	}
+	
 	public static Tree buildTreeFromXML(String url, String xmlDestinationPath) throws Exception {
 		FileReaderSaver fileReader = new FileReaderSaver(url, xmlDestinationPath, false);
 		Document document = fileReader.getDocumentFromXMLFile();
 		
 		Element root = document.getRootElement();
-		Tree tree = getChildren(root, null, 0, 0);
+		Tree tree = getChildren(root, null, 0);
 		return tree;
 	}
 	
-	private static Tree getChildren(Element root, Tree father, int id, int level) throws Exception {
-		
+	private static Tree getChildren(Element root, Tree father, int level) throws Exception {
 		Tree tree;
 		List<Attribute> attr = root.getAttributes();
 		List<Field> fields = new ArrayList<Field>();
@@ -72,24 +84,18 @@ public class VFT {
 		
 		List<Element> children = root.getChildren();
 		if (children.isEmpty()) {
-			tree = new Leaf(id, root.getName(), level, father, fields);
+			tree = new Leaf(id++, root.getName(), level, father, fields);
 			return tree;
 		} else {
-			tree = new Node(id, root.getName(), level, father, fields);
+			tree = new Node(id++, root.getName(), level, father, fields);
 			Iterator<Element> iterator = children.iterator();
 			while (iterator.hasNext()) {
-				Tree child = getChildren(iterator.next(), tree, id + 1, level + 1);
+				Tree child = getChildren(iterator.next(), tree, level + 1);
 				tree.add(child);
-				id++;
 			}
 		}
 		
 		return tree;
-	}
-	
-	public static void drawTree(String url, String xmlDestinationPath, String name) throws Exception {
-		Tree tree = buildTreeFromXML(url, xmlDestinationPath);
-		Painter.painter(tree, 1200, 600, name);
 	}
 	
 }

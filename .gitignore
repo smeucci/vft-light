@@ -6,4 +6,5 @@
 *.*~
 .project
 .classpath
+*.jar
 /target/

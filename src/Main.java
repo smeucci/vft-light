@@ -1,25 +1,27 @@
 
 import static tool.VFT.*;
+import static util.Util.*;
+
+import org.apache.commons.cli.*;
 
 public class Main {
 
+	public static String parse;
+	public static String draw;
+	public static String input;
+	public static String output;
+	
 	public static void main(String args[]) throws Exception {
 		
-		String[] urls = {
-				"/media/saverio/DATA/dataset-righini/videos/ipad2_giulia/outdoor/garden_move_1.MOV",
-				"/media/saverio/DATA/dataset-righini/videos/galaxytrendplus_davide/flat/sky_move_1.mp4",
-				"/media/saverio/DATA/dataset-righini/videos/galaxys3_dasara/indoor/uni_move_1.mp4",
-				"/media/saverio/DATA/dataset-righini/videos/huaweig6_rossana/outdoor/road_move_1.mp4",
-				"/media/saverio/DATA/dataset-righini/videos/galaxytaba_ilaria/outdoor/railway_move_1.mp4",
-				"/media/saverio/DATA/dataset-righini/videos/ipadmini_marco/indoor/uni_move_1.MOV"};
-		String xmlDestinationPath = "/home/saverio/Projects/vft-light/dataset/";
-		
-		//getXmlContainer(urls[0], xmlDestinationPath);
-		
-		String url = "/home/saverio/Projects/vft-light/dataset/garden_move_1.MOV.xml";
-		//buildTreeFromXML(url, xmlDestinationPath);
-		drawTree(url, xmlDestinationPath, "test");
-		
+		CommandLine cmd = parseArguments(args);
+		if (cmd.hasOption("parse")) {
+			input = cmd.getOptionValue("input");
+			output = cmd.getOptionValue("output");
+			parse(input, output);
+		} else if (cmd.hasOption("draw")) {
+			input = cmd.getOptionValue("input");
+			draw(input, null, "Tree of: " + input + " - Press 0 to exit.");
+		}
 	}
-	
+
 }

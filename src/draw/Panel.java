@@ -6,7 +6,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
+
 import javax.swing.JPanel;
 
 import tree.ConcreteVisitor;
@@ -19,8 +21,8 @@ public class Panel extends JPanel {
 	private int[] x_values;
 	private Tree tree;
 	private HashMap<Integer, Point> map;
-	private int x_start = 0;
-	private int y_start = 0;
+	private int x_start = 200;
+	private int y_start = 30;
 	private LinkedList<Tree> result;
 	
 	public Panel(Tree tree, int x, int y) {
@@ -33,61 +35,60 @@ public class Panel extends JPanel {
 	}
 	
 	private void initialize() {
-		for (int i = 0; i < x_values.length; i++) {
-			x_values[i] = 0;
+		x_values[0] = 568;
+		for (int i = 1; i < x_values.length; i++) {
+			x_values[i] = -32;
 		}
-		x_values[0] = 600;
 	}
 
 	public int getX(int level){
-		x_values[level] = x_values[level] + 32;
-		if(x_values[level] > 1500) {
-			x_values[level] = 32;
-		}
+		x_values[level] = (x_values[level] > 1500) ? 32 : x_values[level] + 32;
 		x_start = x_values[level];
 		return x_start;
 	}
 	
 	public void paintComponent(Graphics g) {		
-		g.setFont(new Font("SansSerif",Font.BOLD,10));
+		g.setFont(new Font("SansSerif", Font.BOLD,10));
 		ConcreteVisitor visitor = new ConcreteVisitor();
 		tree.acceptVisit(visitor);
 		result = visitor.getResult();
-		for (Tree the_node:result) {
+		for (Tree node: result) {
 			
 			Color c = new Color(0, 0, 0);
 			g.setColor(c);
 			
-			x_start = getX(the_node.getLevel());	
-			y_start+= the_node.getLevel()*60;
+			x_start = getX(node.getLevel());	
+			y_start+= node.getLevel()*60;
 			g.drawArc(x_start, y_start, 5, 5, 0, 360);
-						
-			String str = the_node.getName();
+
+			String str = node.getName();
+			g.setFont(new Font("medium", Font.PLAIN, 8));
+			g.drawString("" +  node.getID() + "", x_start - 10, y_start - 12);
+			g.setFont(new Font("SansSerif", Font.BOLD, 10));
 			g.drawString(str, x_start - 10, y_start - 5); 
-			g.setFont(new Font("SansSerif",Font.BOLD, 10));
 			
-			map.put(the_node.getID(), new Point(x_start,y_start));		
+			map.put(node.getID(), new Point(x_start, y_start));
 			x_start = 0;
 			y_start = 0;
 		}
 		x_start = 200;
 		y_start = 30;
-		//drawArchs(g);
+		drawArchs(g);
 	}
 	
 	public void drawArchs(Graphics g) {
-		for (int i = 0; i < result.size(); i++) {	
-			Tree act = result.get(i);
-			int actid = act.getID(); 
-			int fatherid = act.getIDFather();			
-			if (fatherid >= 0) {				
-				Point first = map.get(actid);
-				Point second = map.get(fatherid);
-				int x1 = first.x;
-				int y1 = first.y;
-				int x2 = second.x;
-				int y2 = second.y;
-				g.drawLine(x1, y1, x2, y2);
+		Color c = new Color(236, 78, 46);
+		g.setColor(c);
+		for (int i = 0; i < result.size(); i++) {
+			Tree a = result.get(i);
+			Iterator<Tree> itr = a.iterator();
+			if (itr != null) {
+				while(itr.hasNext()) {
+					Tree b = itr.next();
+					Point first = map.get(a.getID());
+					Point second = map.get(b.getID());
+					g.drawLine(first.x, first.y, second.x, second.y);
+				}
 			}
 		}
 	}

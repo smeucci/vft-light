@@ -3,18 +3,12 @@ package io;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.Attribute;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-
-import tree.*;
 
 import com.coremedia.iso.IsoFile;
 
@@ -23,7 +17,7 @@ public class FileReaderSaver {
 	//attributes filenameand sourcePath is derived from attribute url
 	private String url;
 	private String filename;
-	private String sourcePath;
+	//private String sourcePath;
 	private String destinationPath;
 	
 	public FileReaderSaver(String url, String xmlDestinationPath, boolean op) {
@@ -36,7 +30,7 @@ public class FileReaderSaver {
 				System.out.println(e.getMessage());
 			}
 		} else {
-			this.filename = this.sourcePath = this.destinationPath = null;
+			this.filename = this.destinationPath = null;
 		}
 	}
 	
@@ -51,6 +45,11 @@ public class FileReaderSaver {
 	public IsoFile getIsoFile() throws IOException {
 		//return an IsoFile, it contains all boxes of the container
 		File file = new File(this.url);
+		if (!file.exists()) {
+			System.err.println("Could not find " + this.url + ".");
+			System.exit(0);
+			return null;
+		}
 		return new IsoFile(file.getAbsolutePath());
 	}
 	
@@ -64,21 +63,27 @@ public class FileReaderSaver {
 	
 	private void fillFilenameAndSourcePath() {
 		//fill the attributes sourcePath and filename
-		String noName, tmp = null;
+//		String noName, tmp = null;
 		String init = this.url;
 		String[] splits = init.split("\\/");
 		this.filename = splits[splits.length - 1];
-		noName = splits[0];
-		for (int i = 1; i < splits.length - 1; i++) {
-			tmp = noName.concat("/" + splits[i]);
-		}
-		this.sourcePath = tmp;
+//		noName = splits[0];
+//		for (int i = 1; i < splits.length - 1; i++) {
+//			tmp = noName.concat("/" + splits[i]);
+//		}
+//		this.sourcePath = tmp;
 	}
 	
 	public Document getDocumentFromXMLFile() throws JDOMException, IOException {
 		//create a SAXBuilder and a document
 		SAXBuilder builder = new SAXBuilder();
-		return builder.build(new File(this.url));
+		File file = new File(this.url);
+		if (!file.exists()) {
+			System.err.println("Could not find " + this.url + ".");
+			System.exit(0);
+			return null;
+		}
+		return builder.build(file);
 	}
 	
 }

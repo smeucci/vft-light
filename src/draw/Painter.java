@@ -1,6 +1,8 @@
 package draw;
 
 import java.awt.Container;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
@@ -20,8 +22,35 @@ public class Painter {
 		panel = new Panel(tree, x, y);
 		container.add(panel);
 		
+		window.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				 
+				if (e.getKeyCode() == KeyEvent.VK_0) {
+					window.dispose();
+					System.exit(0);
+					return;
+				}
+				
+			}
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		window.pack();
 		window.setVisible(true);
+		
 	}
 	
 }
