@@ -17,21 +17,23 @@ public class FileReaderSaver {
 	//attributes filenameand sourcePath is derived from attribute url
 	private String url;
 	private String filename;
-	//private String sourcePath;
 	private String destinationPath;
 	
-	public FileReaderSaver(String url, String xmlDestinationPath, boolean op) {
+	public FileReaderSaver(String url, String xmlDestionationPath) {
 		this.url = url;
-		if (op) {
-			try {
-				fillFilenameAndSourcePath();
-				this.destinationPath = xmlDestinationPath + "/" + this.filename + ".xml";
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
-		} else {
-			this.filename = this.destinationPath = null;
-		}
+		fillFilenamePath();
+		this.destinationPath = xmlDestionationPath + "/" + this.filename + ".xml";
+	}
+	
+	public FileReaderSaver(String url) {
+		this.url = url;
+		this.filename = this.destinationPath = null;
+	}
+
+	private void fillFilenamePath() {
+		String init = this.url;
+		String[] splits = init.split("\\/");
+		this.filename = splits[splits.length - 1];
 	}
 	
 	public String getFilename() {
@@ -40,6 +42,22 @@ public class FileReaderSaver {
 	
 	public void setFilename(String filename) {
 		this.filename = filename;
+	}
+	
+	public String getUrl() {
+		return this.url;
+	}
+	
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
+	public String getDestinationPath() {
+		return this.destinationPath;
+	}
+	
+	public void setDestinationPath(String destinationPath) {
+		this.destinationPath = destinationPath;
 	}
 	
 	public IsoFile getIsoFile() throws IOException {
@@ -59,19 +77,6 @@ public class FileReaderSaver {
 		outputter.setFormat(Format.getPrettyFormat());
 		File save = new File(this.destinationPath);
 		outputter.output(document, new FileOutputStream(save));
-	}
-	
-	private void fillFilenameAndSourcePath() {
-		//fill the attributes sourcePath and filename
-//		String noName, tmp = null;
-		String init = this.url;
-		String[] splits = init.split("\\/");
-		this.filename = splits[splits.length - 1];
-//		noName = splits[0];
-//		for (int i = 1; i < splits.length - 1; i++) {
-//			tmp = noName.concat("/" + splits[i]);
-//		}
-//		this.sourcePath = tmp;
 	}
 	
 	public Document getDocumentFromXMLFile() throws JDOMException, IOException {

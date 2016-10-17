@@ -17,7 +17,7 @@ public class Menu {
 			parse(input, output);
 		} else if (cmd.hasOption("draw")) {
 			input = cmd.getOptionValue("input");
-			draw(input, null, "Tree of: " + input + " - Press 0 to exit.");
+			draw(input, "Tree of: " + input + " - Press 0 to exit.");
 		}
 	}
 	
@@ -26,16 +26,16 @@ public class Menu {
 		Options opts = new Options();
 		
 		OptionGroup group = new OptionGroup();
-		group.addOption(new Option("d", "draw", false, "draw a tree from an xml file."));
-		group.addOption(new Option("p", "parse", false, "parse a video file container into a xml file."));
-		group.addOption(new Option("h", "help", false, "print help message."));
+		group.addOption(new Option("d", "draw", false, "draw a tree from an xml file"));
+		group.addOption(new Option("p", "parse", false, "parse a video file container into a xml file"));
+		group.addOption(new Option("h", "help", false, "print help message"));
 		opts.addOptionGroup(group);
 		
 		Option input_opt = Option.builder("i")
 				.longOpt("input")
 				.argName("file")
 				.hasArg()
-				.desc("video file for --parse, xml file for --draw.")
+				.desc("video file for --parse, xml file for --draw")
 				.build();
 		opts.addOption(input_opt);
 		
@@ -43,7 +43,7 @@ public class Menu {
 				.longOpt("output")
 				.argName("folder")
 				.hasArg()
-				.desc("output folder for the xml file, only for --parse.")
+				.desc("output folder for the xml file, only for --parse")
 				.build();
 		opts.addOption(output_opt);
 		
@@ -61,17 +61,17 @@ public class Menu {
 	        System.exit(0);
 	    }
 	    if (cl.getOptions().length == 0) {
-	    	System.err.println("No options given.");
+	    	System.err.println("No options given");
 	    	formatter.printHelp("vft", opts, true);
 	        System.exit(0);
 	    }
 	    if (cl.hasOption("d") && !cl.hasOption("i")) {
-	    	System.err.println("Missing option: i.");
+	    	System.err.println("Missing option: i");
 	    	formatter.printHelp("vft", opts, true);
 	        System.exit(0);
 	    }
 	    if (cl.hasOption("p") && !cl.hasOption("i") | !cl.hasOption("o")) {
-	    	System.err.println("Missing options: [i | o].");
+	    	System.err.println("Missing options: [i | o]");
 	    	formatter.printHelp("vft", opts, true);
 	        System.exit(0);
 	    }

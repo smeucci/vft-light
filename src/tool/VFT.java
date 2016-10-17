@@ -26,8 +26,13 @@ public class VFT {
 		String filename = null;
 		try {
 			if (!url.endsWith(".xml")) {
-				filename = parser(url, xmlDestinationPath);
-				System.out.println("XML file '" + xmlDestinationPath + "/" + filename + ".xml' created.");
+				FileReaderSaver fileSaver = new FileReaderSaver(url, xmlDestinationPath);
+				//create an ISOFILE using the FileReaderSaver
+				IsoFile isoFile = fileSaver.getIsoFile();
+				Element root = parser(isoFile);
+				//save the content of the container on a xml file using the saveOnFile function of the FileReaderSaver class
+				fileSaver.saveOnFile(new Document(root));
+				System.out.println("XML file '" + xmlDestinationPath + "/" + fileSaver.getFilename() + ".xml' created.");
 			} else {
 				System.err.println("Wrong input format. The input file should be a video file (mp4 or mov).");
 			}
@@ -38,40 +43,40 @@ public class VFT {
 		return filename;
 	}
 	
-	public static String parser(String url, String xmlDestinationPath) throws Exception {
+	public static Element parser(IsoFile isoFile) throws Exception {
 		//save the container of the video on a xml file and return the xml filename
 		Element root = new Element("root");
 		//TODO modelName and phoneBrandName should be read from the console during the parsing phase
 		root.setAttribute("modelName", "phoneBrandName");
-		//create an ISOFILE using the FileReaderSaver
-		FileReaderSaver fileSaver = new FileReaderSaver(url, xmlDestinationPath, true);
-		IsoFile isoFile = fileSaver.getIsoFile();
 		BoxParser boxparser = new BoxParser(isoFile);
 		boxparser.getBoxes(null, root);
-		//save the content of the container on a xml file using the saveOnFile function of the FileReaderSaver class
-		fileSaver.saveOnFile(new Document(root));
-		return fileSaver.getFilename();
+		return root;
 	}
 	
-	public static void draw(String url, String xmlDestinationPath, String name) throws Exception {
+	public static void draw(String url, String name) throws Exception {
 		if (url.endsWith(".xml")) {
-			Tree tree = buildTreeFromXML(url, xmlDestinationPath);
+			Tree tree = buildTreeFromXMLFile(url);
 			Painter.painter(tree, 1200, 600, name);
 		} else {
 			System.err.println("Wrong input format. The input file should be a xml file.");
 		}
 	}
 	
-	public static Tree buildTreeFromXML(String url, String xmlDestinationPath) throws Exception {
-		FileReaderSaver fileReader = new FileReaderSaver(url, xmlDestinationPath, false);
+	public static Tree buildTreeFromXMLFile(String url) throws Exception {
+		FileReaderSaver fileReader = new FileReaderSaver(url);
 		Document document = fileReader.getDocumentFromXMLFile();
-		
 		Element root = document.getRootElement();
-		Tree tree = getChildren(root, null, 0);
+		Tree tree = buildTree(root, null, 0);
 		return tree;
 	}
 	
-	private static Tree getChildren(Element root, Tree father, int level) throws Exception {
+	public static Tree buildTreeFromXMLDocument(Document document) throws Exception {
+		Element root = document.getRootElement();
+		Tree tree = buildTree(root, null, 0);
+		return tree;
+	}
+	
+	private static Tree buildTree(Element root, Tree father, int level) throws Exception {
 		Tree tree;
 		List<Attribute> attr = root.getAttributes();
 		List<Field> fields = new ArrayList<Field>();
@@ -90,7 +95,7 @@ public class VFT {
 			tree = new Node(id++, root.getName(), level, father, fields);
 			Iterator<Element> iterator = children.iterator();
 			while (iterator.hasNext()) {
-				Tree child = getChildren(iterator.next(), tree, level + 1);
+				Tree child = buildTree(iterator.next(), tree, level + 1);
 				tree.add(child);
 			}
 		}
