@@ -22,7 +22,12 @@ public class FileReaderSaver {
 	public FileReaderSaver(String url, String xmlDestionationPath) {
 		this.url = url;
 		fillFilenamePath();
-		this.destinationPath = xmlDestionationPath + "/" + this.filename + ".xml";
+		if (xmlDestionationPath.endsWith("/")) {
+			this.destinationPath = xmlDestionationPath + this.filename + ".xml";
+		} else {
+			this.destinationPath = xmlDestionationPath + "/" + this.filename + ".xml";
+		}
+		
 	}
 	
 	public FileReaderSaver(String url) {

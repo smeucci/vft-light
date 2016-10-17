@@ -76,6 +76,30 @@ public class VFT {
 		return tree;
 	}
 	
+	public static Document buildXMLDocumentFromTree(Tree tree) throws Exception {
+		Element root = buildXML(tree);
+		return new Document(root);
+	}
+	
+	private static Element buildXML(Tree tree) throws Exception {
+		Element root = new Element(tree.getName());
+		List<Field> fields = tree.getFieldsList();
+		
+		for (Field f: fields) {
+			root.setAttribute(f.getName(), f.getValue());
+		}
+		
+		Iterator<Tree> iterator = tree.iterator();
+		if (iterator != null) {
+			while(iterator.hasNext()) {
+				Element child = buildXML(iterator.next());
+				root.addContent(child);
+			}
+		}
+		
+		return root;
+	}
+	
 	private static Tree buildTree(Element root, Tree father, int level) throws Exception {
 		Tree tree;
 		List<Attribute> attr = root.getAttributes();
@@ -96,7 +120,7 @@ public class VFT {
 			Iterator<Element> iterator = children.iterator();
 			while (iterator.hasNext()) {
 				Tree child = buildTree(iterator.next(), tree, level + 1);
-				tree.add(child);
+				tree.addChild(child);
 			}
 		}
 		

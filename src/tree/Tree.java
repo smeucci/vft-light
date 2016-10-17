@@ -5,8 +5,8 @@ import java.util.List;
 public interface Tree extends Iterable<Tree> {
 	
 	public String getName();
-	public void add(Tree c) throws Exception;
-	public void remove(Tree c) throws Exception;
+	public void addChild(Tree c) throws Exception;
+	public void removeChild(Tree c) throws Exception;
 	
 	public void acceptVisit(Visitor v);
 	
@@ -24,6 +24,8 @@ public interface Tree extends Iterable<Tree> {
 	public String getFieldValue(String name);
 	public List<Field> getFieldsList();
 	public void setFieldsList(List<Field> attr);
+	public void addField(Field f);
+	public void addField(String name, String value);
 	
 	public String toString();
 

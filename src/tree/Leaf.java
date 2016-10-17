@@ -32,11 +32,11 @@ public class Leaf implements Tree {
 		return this.name;
 	}
 
-	public void add(Tree c) throws Exception {
+	public void addChild(Tree c) throws Exception {
 		throw new Exception();		
 	}
 
-	public void remove(Tree c) throws Exception {
+	public void removeChild(Tree c) throws Exception {
 		throw new Exception();
 	}
 
@@ -102,6 +102,14 @@ public class Leaf implements Tree {
 	
 	public void setFieldsList(List<Field> fields) {
 		this.fields = fields;
+	}
+	
+	public void addField(Field f) {
+		this.fields.add(f);
+	}
+	
+	public void addField(String name, String value) {
+		this.fields.add(new Field(name, value));
 	}
 	
 	public String toString() {
