@@ -64,23 +64,19 @@ public class Menu {
 	    if (cl.hasOption("h")) {
 	        formatter.printHelp("vft", opts, true);
 	        System.exit(0);
-	    }
-	    if (cl.getOptions().length == 0) {
+	    } else if (cl.getOptions().length == 0) {
 	    	System.err.println("No options given");
 	    	formatter.printHelp("vft", opts, true);
 	        System.exit(0);
-	    }
-	    if (cl.hasOption("d") && !cl.hasOption("i")) {
+	    } else if (cl.hasOption("d") && !cl.hasOption("i")) {
 	    	System.err.println("Missing option: i");
 	    	formatter.printHelp("vft", opts, true);
 	        System.exit(0);
-	    }
-	    if (cl.hasOption("p") && !cl.hasOption("i") || !cl.hasOption("o")) {
+	    } else if (cl.hasOption("parse") && (!cl.hasOption("i") || !cl.hasOption("o"))) {
 	    	System.err.println("Missing options: [i | o]");
 	    	formatter.printHelp("vft", opts, true);
 	        System.exit(0);
-	    }
-	    if (cl.hasOption("b") && !cl.hasOption("i") || !cl.hasOption("o")) {
+	    } else if (cl.hasOption("b") && (!cl.hasOption("i") || !cl.hasOption("o"))) {
 	    	System.err.println("Missing options: [i | o]");
 	    	formatter.printHelp("vft", opts, true);
 	        System.exit(0);
