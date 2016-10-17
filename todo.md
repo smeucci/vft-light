@@ -8,6 +8,7 @@ TODOS
 - fare package utils (countOccurrence, removeSquareBrackets)
 - aggiunger error message nei catch
 - contains in parser, inutile l'or poichè converte le stringhe in lowercase
+- nuovo box trovato in media/saverio/DATA/dataset-righini/videos/galaxytaba_ilaria/indoor/home_move_1.mp4, xyz, applegpscoordinatesbox
 
 
 Migliorie libreria VFT

@@ -18,6 +18,10 @@ public class Menu {
 		} else if (cmd.hasOption("draw")) {
 			input = cmd.getOptionValue("input");
 			draw(input, "Tree of: " + input + " - Press 0 to exit.");
+		} else if (cmd.hasOption("batch")) {
+			input = cmd.getOptionValue("input");
+			output = cmd.getOptionValue("output");
+			batch(input, output);
 		}
 	}
 	
@@ -28,14 +32,15 @@ public class Menu {
 		OptionGroup group = new OptionGroup();
 		group.addOption(new Option("d", "draw", false, "draw a tree from an xml file"));
 		group.addOption(new Option("p", "parse", false, "parse a video file container into a xml file"));
+		group.addOption(new Option("b", "batch", false, "batch parse a directory of video files; it recreates the same folder structure"));
 		group.addOption(new Option("h", "help", false, "print help message"));
 		opts.addOptionGroup(group);
 		
 		Option input_opt = Option.builder("i")
 				.longOpt("input")
-				.argName("file")
+				.argName("file|folder")
 				.hasArg()
-				.desc("video file for --parse, xml file for --draw")
+				.desc("video file for --parse, xml file for --draw, a folder for --batch")
 				.build();
 		opts.addOption(input_opt);
 		
@@ -70,7 +75,12 @@ public class Menu {
 	    	formatter.printHelp("vft", opts, true);
 	        System.exit(0);
 	    }
-	    if (cl.hasOption("p") && !cl.hasOption("i") | !cl.hasOption("o")) {
+	    if (cl.hasOption("p") && !cl.hasOption("i") || !cl.hasOption("o")) {
+	    	System.err.println("Missing options: [i | o]");
+	    	formatter.printHelp("vft", opts, true);
+	        System.exit(0);
+	    }
+	    if (cl.hasOption("b") && !cl.hasOption("i") || !cl.hasOption("o")) {
 	    	System.err.println("Missing options: [i | o]");
 	    	formatter.printHelp("vft", opts, true);
 	        System.exit(0);

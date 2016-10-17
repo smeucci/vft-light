@@ -1,5 +1,6 @@
 package tool;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,22 +23,17 @@ public class VFT {
 	 
 	private static int id = 0;
 	
-	public static String parse(String url, String xmlDestinationPath) throws Exception {
-		String filename = null;
+	public static void parse(String url, String xmlDestinationPath) throws Exception {
 		try {
-			if (!url.endsWith(".xml")) {
+			if (url.toLowerCase().endsWith(".mp4") || url.toLowerCase().endsWith(".mov")) {
 				FileReaderSaver fileSaver = new FileReaderSaver(url, xmlDestinationPath);
 				//create an ISOFILE using the FileReaderSaver
 				IsoFile isoFile = fileSaver.getIsoFile();
 				Element root = parser(isoFile);
 				//save the content of the container on a xml file using the saveOnFile function of the FileReaderSaver class
 				fileSaver.saveOnFile(new Document(root));
-				if (xmlDestinationPath.endsWith("/")) {
-					System.out.println("XML file '" + xmlDestinationPath + fileSaver.getFilename() + ".xml' created.");
-				} else {
-					System.out.println("XML file '" + xmlDestinationPath + "/" + fileSaver.getFilename() + ".xml' created.");
-				}
-				
+				String message = "XML file '" + xmlDestinationPath + "/" + fileSaver.getFilename() + ".xml' created.";
+				System.out.println(message.replace("//", "/"));
 			} else {
 				System.err.println("Wrong input format. The input file should be a video file (mp4 or mov).");
 			}
@@ -45,7 +41,6 @@ public class VFT {
 			System.out.println(e.getMessage());
 			System.out.println("Could not parse video: " + url);
 		}
-		return filename;
 	}
 	
 	public static Element parser(IsoFile isoFile) throws Exception {
@@ -56,6 +51,32 @@ public class VFT {
 		BoxParser boxparser = new BoxParser(isoFile);
 		boxparser.getBoxes(null, root);
 		return root;
+	}
+	
+	public static void batch(String datasetPath, String outputPath) throws Exception {
+		File datasetFolder = new File(datasetPath);
+		if (!datasetFolder.exists() || !datasetFolder.isDirectory()) {
+			System.err.println("Could not find the dataset folder at '" + datasetPath + "'");
+		} else if (!new File(outputPath).exists() || !new File(outputPath).isDirectory()) {
+			System.err.println("Could not find the output folder at '" + outputPath + "'");
+		} else {
+			System.out.println("Batch parsing the dataset at '" + datasetPath + "'");
+			parseDirectory(datasetFolder, outputPath);
+		}
+	}
+	
+	private static void parseDirectory(File folder, String outputPath) throws Exception {
+		File[] files = folder.listFiles();
+		for (File f: files) {
+			if (f.isFile() && !f.getName().startsWith(".")) {
+				System.out.println(f.getAbsolutePath());
+				parse(f.getAbsolutePath(), outputPath);
+			} else if (f.isDirectory()) {
+				File subfolder = new File(f.getAbsolutePath());
+				new File(outputPath + "/" + f.getName()).mkdir();
+				parseDirectory(subfolder, outputPath + "/" + f.getName());
+			}
+		}
 	}
 	
 	public static void draw(String url, String name) throws Exception {
