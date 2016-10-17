@@ -27,7 +27,6 @@ public class FileReaderSaver {
 		} else {
 			this.destinationPath = xmlDestionationPath + "/" + this.filename + ".xml";
 		}
-		
 	}
 	
 	public FileReaderSaver(String url) {
