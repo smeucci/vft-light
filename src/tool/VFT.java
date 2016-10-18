@@ -44,12 +44,9 @@ public class VFT {
 	}
 	
 	public static Element parser(IsoFile isoFile) throws Exception {
-		//save the container of the video on a xml file and return the xml filename
-		Element root = new Element("root");
-		//TODO modelName and phoneBrandName should be read from the console during the parsing phase
-		root.setAttribute("modelName", "phoneBrandName");
+		Element root;
 		BoxParser boxparser = new BoxParser(isoFile);
-		boxparser.getBoxes(null, root);
+		root = boxparser.getBoxes(null);
 		return root;
 	}
 	
@@ -71,7 +68,7 @@ public class VFT {
 			if (f.isFile() && !f.getName().startsWith(".")) {
 				System.out.println(f.getAbsolutePath());
 				parse(f.getAbsolutePath(), outputPath);
-			} else if (f.isDirectory()) {
+			} else if (f.isDirectory() && !f.getName().startsWith("NOT")) {
 				File subfolder = new File(f.getAbsolutePath());
 				new File(outputPath + "/" + f.getName()).mkdir();
 				parseDirectory(subfolder, outputPath + "/" + f.getName());

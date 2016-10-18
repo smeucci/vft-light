@@ -12,12 +12,12 @@ public class GenericBoxWrapper implements Wrapper {
 	
 	public String toString() {
 		StringBuilder result = new StringBuilder();
-		result.append(box.toString().replaceAll("\\]|\\}", ""));
+		result.append(box.toString().replaceAll("\\]|\\}", "").replace("[", "{"));
 		result.append(";");
 		result.append("version=").append(this.box.getVersion());
 		result.append(";");
 		result.append("flags=").append(this.box.getFlags());
-		result.append("]");
+		result.append("}");
 		return result.toString();		
 	}
 }

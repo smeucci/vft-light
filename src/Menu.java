@@ -10,6 +10,8 @@ public class Menu {
 	
 	public static void main(String args[]) throws Exception {
 		
+		parse("/media/saverio/DATA/dataset-righini/videos/ipad2_giulia/outdoor/garden_move_1.MOV", "/home/saverio/");
+		
 		CommandLine cmd = parseArguments(args);
 		if (cmd.hasOption("parse")) {
 			input = cmd.getOptionValue("input");

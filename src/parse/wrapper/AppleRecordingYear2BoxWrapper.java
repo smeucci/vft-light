@@ -12,7 +12,7 @@ public class AppleRecordingYear2BoxWrapper implements Wrapper {
 	
 	public String toString() {
 		StringBuilder result = new StringBuilder();
-		result.append("[");
+		result.append("{");
 		result.append("dataType=").append(this.day.getDataType());
 		result.append(";");
 		result.append("dataCountry=").append(this.day.getDataCountry());
@@ -22,7 +22,7 @@ public class AppleRecordingYear2BoxWrapper implements Wrapper {
 		result.append("language=").append(this.day.getLanguageString());
 		result.append(";");
 		result.append("value=").append(this.day.getValue());
-		result.append("]");
+		result.append("}");
 		return result.toString();	
 	}
 }

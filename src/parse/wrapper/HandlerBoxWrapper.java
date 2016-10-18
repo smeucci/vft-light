@@ -12,7 +12,7 @@ public class HandlerBoxWrapper implements Wrapper {
 	
 	public String toString() {
 		StringBuilder result = new StringBuilder();
-		result.append("[");
+		result.append("{");
         result.append("handlerType=").append(this.hdlr.getHandlerType());
         result.append(";");
         if (this.hdlr.getName().hashCode() == 0) {
@@ -24,7 +24,7 @@ public class HandlerBoxWrapper implements Wrapper {
         result.append("version=").append(this.hdlr.getVersion());
         result.append(";");
         result.append("flags=").append(this.hdlr.getFlags());
-        result.append("]");
+        result.append("}");
 		return result.toString();
 	}
 	

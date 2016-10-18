@@ -34,7 +34,7 @@ public class GenericAtomWrapper implements Wrapper {
 		}
 		
 		StringBuilder result = new StringBuilder();
-		result.append("[");
+		result.append("{");
 		result.append("width=").append(width);
         result.append(";");
         result.append("height=").append(height);
@@ -42,7 +42,7 @@ public class GenericAtomWrapper implements Wrapper {
         result.append("version=").append(version);
         result.append(";");
         result.append("flags=").append(flags);
-        result.append("]");
+        result.append("}");
 		return result.toString();		
 	}
 	

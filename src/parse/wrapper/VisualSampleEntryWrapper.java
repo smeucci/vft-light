@@ -12,7 +12,7 @@ public class VisualSampleEntryWrapper implements Wrapper {
 	
 	public String toString() {
 		StringBuilder result = new StringBuilder();
-        result.append("[");
+        result.append("{");
         result.append("data_reference_index=").append(this.avc1.getDataReferenceIndex());
         result.append(";");
         result.append("width=").append(this.avc1.getWidth());
@@ -28,7 +28,7 @@ public class VisualSampleEntryWrapper implements Wrapper {
         result.append("compressorname=").append(this.avc1.getCompressorname());
         result.append(";");
         result.append("depth=").append(this.avc1.getDepth());
-        result.append("]");
+        result.append("}");
         return result.toString();
 	}
 }

@@ -15,13 +15,13 @@ public class SampleDependencyTypeBoxWrapper implements Wrapper {
 	public String toString() {
 		StringBuilder result = new StringBuilder();
 		List<SampleDependencyTypeBox.Entry> entries = this.sdtp.getEntries();
-		result.append("[");
+		result.append("{");
 		result.append("entryCount=").append(entries.size());
 		result.append(";");
 		result.append("version=").append(this.sdtp.getVersion());
 		result.append(";");
 		result.append("flags=").append(this.sdtp.getFlags());
-		result.append("]");
+		result.append("}");
 		return result.toString();
 	}
 }

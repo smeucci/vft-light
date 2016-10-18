@@ -27,11 +27,11 @@ public class GenericContainerBoxWrapper implements Wrapper {
 		}
 		
 		StringBuilder result = new StringBuilder();
-		result.append("[");
+		result.append("{");
 		result.append("version=").append(version);
         result.append(";");
         result.append("flags=").append(flags);
-        result.append("]");
+        result.append("}");
 		return result.toString();
 	}
 }

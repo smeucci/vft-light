@@ -11,6 +11,7 @@ import parse.wrapper.*;
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.boxes.Box;
 import com.coremedia.iso.boxes.EditListBox;
+import com.coremedia.iso.boxes.FileTypeBox;
 import com.coremedia.iso.boxes.HandlerBox;
 import com.coremedia.iso.boxes.SampleDependencyTypeBox;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
@@ -28,13 +29,41 @@ public class BoxParser {
 		this.isoFile = isoFile;
 	}
 	
-	public void getBoxes(AbstractContainerBox ab, Element root) throws Exception {
+	public Element getBoxes(Box box) throws Exception {	
+		Element root;
+		String boxType = (box == null) ? "root" : sanitize(box.getType());
+		try {
+			root = new Element(boxType);
+		} catch (Exception e) {
+			root = new Element("unkn");
+		}
+		
+		String attr = parseBoxAttributesAsString(box, boxType);
+		separateNameValue(root, extractNameValue(attr));
+		
+		List<Box> boxes = null;
+		if (box == null) {
+			boxes = this.isoFile.getBoxes();
+		} else if (box instanceof AbstractContainerBox){
+			boxes = ((AbstractContainerBox) box).getBoxes();
+		}
+		
+		if (boxes != null) {
+			for (Box b: boxes) {
+				Element child = getBoxes(b);
+				root.addContent(child);
+			}
+		}
+		
+		return root;
+	}
+	
+	public void getBoxes_old(AbstractContainerBox ab, Element root) throws Exception {
 		List<Box> boxes = (ab == null) ? (this.isoFile.getBoxes()) : (ab.getBoxes());
 		
 		for (Box box: boxes) {
 			String boxType = sanitize(box.getType());
 			Element item;
-			Wrapper wrapper;
 			
 			try {
 				item = new Element(boxType);
@@ -42,69 +71,11 @@ public class BoxParser {
 				item = new Element("unkn");
 			}
 			
-			switch (boxType) {
-			case "ftyp":
-				separateNameValueSpecial(item, extractNameValue(box.toString()));
-				break;
-			case "mdat": case "frma":
-				separateNameValue(item, extractNameValue(box.toString()));
-				break;
-			case "mvhd": case "tkhd": case "mdhd": case "vmhd": case "smhd":
-			case "stts": case "stss": case "stsc": case "stsz": case "stco":
-				wrapper = new GenericBoxWrapper((AbstractFullBox) box);
-				separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
-			case "clef": case "prof": case "enof":
-				wrapper = new GenericAtomWrapper((AbstractFullBox) box);
-				separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
-			case "elst":
-				wrapper = new EditListBoxWrapper((EditListBox) box);
-				separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
-			case "hdlr":
-				wrapper = new HandlerBoxWrapper((HandlerBox) box);
-				separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
-			case "dref": case "stsd": case "meta":
-				wrapper = new GenericContainerBoxWrapper((AbstractContainerBox) box);
-				separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
-			case "avc1":
-				wrapper = new VisualSampleEntryWrapper((VisualSampleEntry) box);
-				separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
-			case "avcC":
-				wrapper = new AvcConfigurationBoxWrapper((AvcConfigurationBox) box);
-				separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
-			case "sdtp":
-				wrapper = new SampleDependencyTypeBoxWrapper((SampleDependencyTypeBox) box);
-				separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
-			case "mp4a":
-				wrapper = new AudioSampleEntryWrapper((AudioSampleEntry) box);
-				separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
-			case "esds":
-				wrapper = new ESDescriptorBoxWrapper((ESDescriptorBox) box);
-				separateNameValue(item, extractNameValue(wrapper.toString()));
-				break;
-			case "day":
-				//wrapper = new AppleRecordingYear2BoxWrapper((AppleRecordingYear2Box) box);
-				//separateNameValue(item, extractNameValue(wrapper.toString()));
-				//break;
-			default:
-				try {
-					item.setAttribute("stuff", box.toString());
-				} catch (Exception e) {
-					item.setAttribute("stuff", "null");
-				}
-				break;
-			}
+			String attributes = parseBoxAttributesAsString(box, boxType);
+			separateNameValue(item, extractNameValue(attributes));			
 			
 			if (box instanceof AbstractContainerBox) {
-				getBoxes((AbstractContainerBox) box, item);
+				getBoxes_old((AbstractContainerBox) box, item);
 			}
 			root.addContent(item);
 		}
@@ -112,8 +83,8 @@ public class BoxParser {
 	
 	protected String[] extractNameValue(String str) {
 		//return a string vector containing the couple name=value for the input box
-		String init = removeBrackets(removeBrackets(str, "}"), "]");
-		return init.split("\\[|\\{")[1].split("\\;|\\,");
+		String init = removeBrackets(str, "}");
+		return init.split("\\{")[1].split("\\;|\\,");
 	}
 	
 	protected void separateNameValue(Element item, String[] str) {
@@ -122,24 +93,69 @@ public class BoxParser {
 		for (String s: str) {			
 			result = s.split("\\=");
 			String value = (result.length == 1) ? "null" : result[1];
-			item.setAttribute(result[0].trim(), value);
+			try {
+				item.setAttribute(result[0].trim(), value);
+			} catch (Exception e) {
+				item.setAttribute(result[0].trim(), "null");
+			}
 		}			
 	}
 	
-	protected void separateNameValueSpecial(Element item, String[] str) {
-		//return an item with attributes in the form of name="value"
-		String[] result = null;			
-		for (int i = 0; i < str.length; i++) {
-			result = str[i].split("\\=");
-			if (i > 1) {
-				//this control on index i was added for the ftyp box because the field
-				// compatibleBrand is a list of compatible brands
-				String name = result[0] + "_" + (i - 1);
-				item.setAttribute(name.trim(), result[1]);
-			} else {		
-				item.setAttribute(result[0].trim(), result[1]);
-			}
+	protected String parseBoxAttributesAsString(Box box, String boxType) {
+				
+		String attr = null;
+		switch (boxType) {
+		case "root":
+			attr = new RootWrapper("phoneBrandName").toString();
+			break;
+		case "ftyp":
+			attr = new FileTypeBoxWrapper((FileTypeBox) box).toString();
+			break;
+		case "mdat": 
+			attr = box.toString();
+		case "frma":
+			attr = box.toString().replace("[", "{").replace("]", "}");
+			break;
+		case "mvhd": case "tkhd": case "mdhd": case "vmhd": case "smhd":
+		case "stts": case "stss": case "stsc": case "stsz": case "stco":
+			attr = new GenericBoxWrapper((AbstractFullBox) box).toString();
+			break;
+		case "clef": case "prof": case "enof":
+			attr = new GenericAtomWrapper((AbstractFullBox) box).toString();
+			break;
+		case "elst":
+			attr = new EditListBoxWrapper((EditListBox) box).toString();
+			break;
+		case "hdlr":
+			attr = new HandlerBoxWrapper((HandlerBox) box).toString();
+			break;
+		case "dref": case "stsd": case "meta":
+			attr = new GenericContainerBoxWrapper((AbstractContainerBox) box).toString();
+			break;
+		case "avc1":
+			attr = new VisualSampleEntryWrapper((VisualSampleEntry) box).toString();
+			break;
+		case "avcC":
+			attr = new AvcConfigurationBoxWrapper((AvcConfigurationBox) box).toString();
+			break;
+		case "sdtp":
+			attr = new SampleDependencyTypeBoxWrapper((SampleDependencyTypeBox) box).toString();
+			break;
+		case "mp4a":
+			attr = new AudioSampleEntryWrapper((AudioSampleEntry) box).toString();
+			break;
+		case "esds":
+			attr = new ESDescriptorBoxWrapper((ESDescriptorBox) box).toString();
+			break;
+		case "day":
+			//attr = new AppleRecordingYear2BoxWrapper((AppleRecordingYear2Box) box).toString();
+			//break;
+		default:
+			attr = new DefaultBoxWrapper(box).toString();
+			break;
 		}
+		
+		return attr;
 	}
 	
 }

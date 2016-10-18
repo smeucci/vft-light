@@ -12,7 +12,7 @@ public class AudioSampleEntryWrapper implements Wrapper {
 	
 	public String toString() {
 		StringBuilder result = new StringBuilder();
-        result.append("AudioSampleEntry[");
+        result.append("{");
         result.append("bytesPerSample=").append(this.mp4a.getBytesPerSample());
         result.append(";");
         result.append("bytesPerFrame=").append(this.mp4a.getBytesPerFrame());
@@ -32,7 +32,7 @@ public class AudioSampleEntryWrapper implements Wrapper {
         result.append("sampleSize=").append(this.mp4a.getSampleSize());
         result.append(";");
         result.append("channelCount=").append(this.mp4a.getChannelCount());        
-        result.append("]");
+        result.append("}");
         return result.toString();
 	}
 	
