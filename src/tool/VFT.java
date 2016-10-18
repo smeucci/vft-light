@@ -68,7 +68,7 @@ public class VFT {
 			if (f.isFile() && !f.getName().startsWith(".")) {
 				System.out.println(f.getAbsolutePath());
 				parse(f.getAbsolutePath(), outputPath);
-			} else if (f.isDirectory() && !f.getName().startsWith("NOT")) {
+			} else if (f.isDirectory() && !f.getName().endsWith(".NOT")) {
 				File subfolder = new File(f.getAbsolutePath());
 				new File(outputPath + "/" + f.getName()).mkdir();
 				parseDirectory(subfolder, outputPath + "/" + f.getName());
