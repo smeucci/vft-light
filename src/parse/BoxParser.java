@@ -77,14 +77,12 @@ public class BoxParser {
 				
 		String attr = null;
 		switch (boxType) {
-		case "root":
-			attr = new RootWrapper("phoneBrandName").toString();
-			break;
 		case "ftyp":
 			attr = new FileTypeBoxWrapper((FileTypeBox) box).toString();
 			break;
 		case "mdat": 
 			attr = box.toString();
+			break;
 		case "frma":
 			attr = box.toString().replace("[", "{").replace("]", "}");
 			break;
