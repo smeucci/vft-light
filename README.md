@@ -5,7 +5,7 @@ Lite version of VFT based on [Vishal Sharma, Analisi Forense di Video File Conta
 Usage
 =====
 ```bash
-java -jar vft.jar [-d | -h | -p]  [-i <file>] [-o <folder>]
+java -jar vft.jar [-b | -d | -h | -p]  [-i <file>] [-o <folder>]
 ```
 
 Examples
@@ -14,6 +14,11 @@ Examples
 Parse a video file container into a xml file:
 ```bash
 java -jar vft.jar -p  -i input.mp4 -o /output_folder
+```
+
+Batch parse a directory of videos. It also recreates the same subdirectory structure:
+```bash
+java -jar vft.jar -b  -i /input_folder -o /output_folder
 ```
 
 Draw a tree from an input xml file:
