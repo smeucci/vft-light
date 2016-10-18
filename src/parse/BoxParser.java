@@ -2,6 +2,7 @@ package parse;
 
 import static util.Util.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.jdom2.Element;
@@ -29,36 +30,7 @@ public class BoxParser {
 		this.isoFile = isoFile;
 	}
 	
-	public Element getBoxes(Box box) throws Exception {	
-		Element root;
-		String boxType = (box == null) ? "root" : sanitize(box.getType());
-		try {
-			root = new Element(boxType);
-		} catch (Exception e) {
-			root = new Element("unkn");
-		}
-		
-		String attr = parseBoxAttributesAsString(box, boxType);
-		separateNameValue(root, extractNameValue(attr));
-		
-		List<Box> boxes = null;
-		if (box == null) {
-			boxes = this.isoFile.getBoxes();
-		} else if (box instanceof AbstractContainerBox){
-			boxes = ((AbstractContainerBox) box).getBoxes();
-		}
-		
-		if (boxes != null) {
-			for (Box b: boxes) {
-				Element child = getBoxes(b);
-				root.addContent(child);
-			}
-		}
-		
-		return root;
-	}
-	
-	public void getBoxes_old(AbstractContainerBox ab, Element root) throws Exception {
+	public void getBoxes(AbstractContainerBox ab, Element root) throws Exception {
 		List<Box> boxes = (ab == null) ? (this.isoFile.getBoxes()) : (ab.getBoxes());
 		
 		for (Box box: boxes) {
@@ -75,7 +47,7 @@ public class BoxParser {
 			separateNameValue(item, extractNameValue(attributes));			
 			
 			if (box instanceof AbstractContainerBox) {
-				getBoxes_old((AbstractContainerBox) box, item);
+				getBoxes((AbstractContainerBox) box, item);
 			}
 			root.addContent(item);
 		}
@@ -101,7 +73,7 @@ public class BoxParser {
 		}			
 	}
 	
-	protected String parseBoxAttributesAsString(Box box, String boxType) {
+	protected String parseBoxAttributesAsString(Box box, String boxType) throws IOException {
 				
 		String attr = null;
 		switch (boxType) {

@@ -38,15 +38,18 @@ public class VFT {
 				System.err.println("Wrong input format. The input file should be a video file (mp4 or mov).");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println(e.getMessage());
 			System.out.println("Could not parse video: " + url);
 		}
 	}
 	
 	public static Element parser(IsoFile isoFile) throws Exception {
-		Element root;
+		Element root = new Element("root");
+		//TODO modelName and phoneBrandName should be read from the console during the parsing phase
+		root.setAttribute("modelName", "phoneBrandName");
 		BoxParser boxparser = new BoxParser(isoFile);
-		root = boxparser.getBoxes(null);
+		boxparser.getBoxes(null, root);
 		return root;
 	}
 	
@@ -66,9 +69,8 @@ public class VFT {
 		File[] files = folder.listFiles();
 		for (File f: files) {
 			if (f.isFile() && !f.getName().startsWith(".")) {
-				System.out.println(f.getAbsolutePath());
 				parse(f.getAbsolutePath(), outputPath);
-			} else if (f.isDirectory() && !f.getName().endsWith(".NOT")) {
+			} else if (f.isDirectory() && !f.getName().toLowerCase().endsWith(".not")) {
 				File subfolder = new File(f.getAbsolutePath());
 				new File(outputPath + "/" + f.getName()).mkdir();
 				parseDirectory(subfolder, outputPath + "/" + f.getName());

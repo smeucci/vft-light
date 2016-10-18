@@ -18,7 +18,7 @@ public class HandlerBoxWrapper implements Wrapper {
         if (this.hdlr.getName().hashCode() == 0) {
         	result.append("name=null");
         } else {
-        	result.append("name=").append(this.hdlr.getName().replace("HandlerBox[", "").replaceAll("||", ""));
+        	result.append("name=").append(this.hdlr.getName().replace("HandlerBox[", "").replaceAll("||", "").replace(",", ""));
         }
         result.append(";");
         result.append("version=").append(this.hdlr.getVersion());
