@@ -65,7 +65,7 @@ public class VFT {
 		}
 	}
 	
-	private static void parseDirectory(File folder, String outputPath) throws Exception {
+	public static void parseDirectory(File folder, String outputPath) throws Exception {
 		File[] files = folder.listFiles();
 		for (File f: files) {
 			if (f.isFile() && !f.getName().startsWith(".")) {
@@ -106,7 +106,7 @@ public class VFT {
 		return new Document(root);
 	}
 	
-	private static Element buildXML(Tree tree) throws Exception {
+	public static Element buildXML(Tree tree) throws Exception {
 		Element root = new Element(tree.getName());
 		List<Field> fields = tree.getFieldsList();
 		
@@ -125,7 +125,7 @@ public class VFT {
 		return root;
 	}
 	
-	private static Tree buildTree(Element root, Tree father, int level) throws Exception {
+	public static Tree buildTree(Element root, Tree father, int level) throws Exception {
 		Tree tree;
 		List<Attribute> attr = root.getAttributes();
 		List<Field> fields = new ArrayList<Field>();
