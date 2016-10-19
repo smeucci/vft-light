@@ -18,6 +18,6 @@ public class GenericBoxWrapper implements Wrapper {
 		result.append(";");
 		result.append("flags=").append(this.box.getFlags());
 		result.append("}");
-		return result.toString();		
+		return result.toString();
 	}
 }

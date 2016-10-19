@@ -15,11 +15,17 @@ import com.coremedia.iso.boxes.EditListBox;
 import com.coremedia.iso.boxes.FileTypeBox;
 import com.coremedia.iso.boxes.HandlerBox;
 import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.coremedia.iso.boxes.fragment.MovieExtendsHeaderBox;
+import com.coremedia.iso.boxes.fragment.MovieFragmentBox;
+import com.coremedia.iso.boxes.fragment.TrackExtendsBox;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 import com.googlecode.mp4parser.AbstractContainerBox;
 import com.googlecode.mp4parser.AbstractFullBox;
+import com.googlecode.mp4parser.boxes.apple.AppleGPSCoordinatesBox;
+import com.googlecode.mp4parser.boxes.apple.PixelAspectRationAtom;
 import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
+import com.mp4parser.iso14496.part12.BitRateBox;
 import com.mp4parser.iso14496.part15.AvcConfigurationBox;
 
 public class BoxParser {
@@ -76,11 +82,12 @@ public class BoxParser {
 	protected String parseBoxAttributesAsString(Box box, String boxType) throws IOException {
 				
 		String attr = null;
+		
 		switch (boxType) {
 		case "ftyp":
 			attr = new FileTypeBoxWrapper((FileTypeBox) box).toString();
 			break;
-		case "mdat": 
+		case "mdat":
 			attr = box.toString();
 			break;
 		case "frma":
@@ -88,6 +95,8 @@ public class BoxParser {
 			break;
 		case "mvhd": case "tkhd": case "mdhd": case "vmhd": case "smhd":
 		case "stts": case "stss": case "stsc": case "stsz": case "stco":
+		case "sidx": case "mfhd": case "tfhd": case "tfdt": case "trun":
+		case "co64":
 			attr = new GenericBoxWrapper((AbstractFullBox) box).toString();
 			break;
 		case "clef": case "prof": case "enof":
@@ -116,6 +125,24 @@ public class BoxParser {
 			break;
 		case "esds":
 			attr = new ESDescriptorBoxWrapper((ESDescriptorBox) box).toString();
+			break;
+		case "xyz":
+			attr = new AppleGPSCoordinatesBoxWrapper((AppleGPSCoordinatesBox) box).toString();
+			break;
+		case "moof":
+			attr = new MovieFragmentBoxWrapper((MovieFragmentBox) box).toString();
+			break;
+		case "mehd":
+			attr = new MovieExtendsHeaderBoxWrapper((MovieExtendsHeaderBox) box).toString();
+			break;
+		case "trex":
+			attr = new TrackExtendsBoxWrapper((TrackExtendsBox) box).toString();
+			break;
+		case "btrt":
+			attr = new BitRateBoxWrapper((BitRateBox) box).toString();
+			break;
+		case "pasp":
+			attr = new PixelAspectRationAtomWrapper((PixelAspectRationAtom) box).toString();
 			break;
 		case "day":
 			//attr = new AppleRecordingYear2BoxWrapper((AppleRecordingYear2Box) box).toString();

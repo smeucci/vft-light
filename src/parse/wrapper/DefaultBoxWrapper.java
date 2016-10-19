@@ -32,6 +32,8 @@ public class DefaultBoxWrapper {
 		text.append(box.getType());
 		text.append(",");
 		text.append(box.getClass().toString());
+		text.append(",");
+		text.append(box.toString());
 		text.append("\n");
 		try {
 		    out.write(text.toString());

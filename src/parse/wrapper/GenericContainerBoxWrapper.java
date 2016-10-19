@@ -15,13 +15,13 @@ public class GenericContainerBoxWrapper implements Wrapper {
 	
 	public String toString() {
 		int version = 0, flags = 0;
-		if (box instanceof DataReferenceBox) {
+		if (this.box instanceof DataReferenceBox) {
 			version = ((DataReferenceBox) this.box).getVersion();
 			flags = ((DataReferenceBox) this.box).getFlags();
-		} else if (box instanceof SampleDescriptionBox) {
+		} else if (this.box instanceof SampleDescriptionBox) {
 			version = ((SampleDescriptionBox) this.box).getVersion();
 			flags = ((SampleDescriptionBox) this.box).getFlags();
-		} else if (box instanceof MetaBox) {
+		} else if (this.box instanceof MetaBox) {
 			version = ((MetaBox) this.box).getVersion();
 			flags = ((MetaBox) this.box).getFlags();
 		}
