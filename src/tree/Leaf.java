@@ -27,7 +27,11 @@ public class Leaf implements Tree {
 	public Iterator<Tree> iterator() {
 		return null;
 	}
-
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public String getName() {
 		return this.name;
 	}
@@ -79,6 +83,10 @@ public class Leaf implements Tree {
 		}
 	}
 
+	public void setID(int ID) {
+		this.ID = ID;
+	}
+	
 	public int getID() {
 		return this.ID;
 	}
@@ -110,6 +118,10 @@ public class Leaf implements Tree {
 	
 	public void addField(String name, String value) {
 		this.fields.add(new Field(name, value));
+	}
+	
+	public Tree clone() {
+		return new Leaf(this.ID, this.name, this.level, this.father, this.fields);
 	}
 	
 	public String toString() {

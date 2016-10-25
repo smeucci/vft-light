@@ -152,4 +152,63 @@ public class VFT {
 		return tree;
 	}
 	
+	public static void merge(String a, String b, String xmlDestinationPath) throws Exception {
+		Tree ta = buildTreeFromXMLFile(a);
+		Tree tb = buildTreeFromXMLFile(b);
+		
+		mergeTree(ta, tb);
+		
+		Document document = buildXMLDocumentFromTree(ta);
+		FileReaderSaver filesaver = new FileReaderSaver("config", xmlDestinationPath);
+		filesaver.saveOnFile(document);		
+	}
+	
+	public static void mergeTree(Tree config, Tree tree) throws Exception {
+		
+		if (tree.getNumChildren() > 0) {
+			Tree toBeUpdated = null;
+			Iterator<Tree> treeIterator = tree.iterator();
+			while (treeIterator.hasNext()) {
+				boolean isPresent = false;
+				Tree treeChild = treeIterator.next();
+					
+				Iterator<Tree> configIterator = config.iterator();
+				while (configIterator.hasNext() && !isPresent) {
+					Tree configChild = configIterator.next();
+					
+					if (configChild.getName().equals(treeChild.getName()) && !configChild.getName().equals("trak")) {
+						isPresent = true;
+						toBeUpdated = configChild;
+					} else if (checkTrakType(treeChild).equals("vide") && checkTrakType(configChild).equals("vide")) {	
+						isPresent = true;
+						toBeUpdated = configChild;	
+					} else if (checkTrakType(treeChild).equals("soun") && checkTrakType(configChild).equals("soun")) {
+						isPresent = true;
+						toBeUpdated = configChild;
+					}
+					
+				}
+			
+				if (!isPresent) {
+					toBeUpdated = treeChild.clone();
+					toBeUpdated.setFather(config);
+					toBeUpdated.setLevel(config.getLevel() + 1);
+					config.addChild(toBeUpdated);
+				}
+				
+				mergeTree(toBeUpdated, treeChild);		
+			}	
+		}
+	
+	}
+	
+	public static String checkTrakType(Tree trak) {
+		if (trak instanceof Node && trak.getName().equals("trak")) {
+			Node mdia = (Node) ((Node) trak).getChildByName("mdia");
+			Tree hdlr = mdia.getChildByName("hdlr");
+			return hdlr.getFieldValue("handlerType");
+		}
+		return "";
+	}
+	
 }

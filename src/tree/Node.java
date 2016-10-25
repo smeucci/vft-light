@@ -34,6 +34,10 @@ public class Node implements Tree {
 		return children.iterator();
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public String getName() {
 		return this.name;
 	}
@@ -87,6 +91,10 @@ public class Node implements Tree {
 		}
 	}
 
+	public void setID(int ID) {
+		this.ID = ID;
+	}
+	
 	public int getID() {
 		return this.ID;
 	}
@@ -127,6 +135,10 @@ public class Node implements Tree {
 			}
 		}
 		return null;		
+	}
+	
+	public Tree clone() {
+		return new Node(this.ID, this.name, this.level, this.father, this.fields);
 	}
 	
 	public String toString() {

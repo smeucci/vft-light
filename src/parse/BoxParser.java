@@ -144,7 +144,7 @@ public class BoxParser {
 		case "pasp":
 			attr = new PixelAspectRationAtomWrapper((PixelAspectRationAtom) box).toString();
 			break;
-		case "day":
+		//case "day":
 			//attr = new AppleRecordingYear2BoxWrapper((AppleRecordingYear2Box) box).toString();
 			//break;
 		default:

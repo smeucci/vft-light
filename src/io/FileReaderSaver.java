@@ -19,13 +19,13 @@ public class FileReaderSaver {
 	private String filename;
 	private String destinationPath;
 	
-	public FileReaderSaver(String url, String xmlDestionationPath) {
+	public FileReaderSaver(String url, String xmlDestinationPath) {
 		this.url = url;
 		fillFilenamePath();
-		if (xmlDestionationPath.endsWith("/")) {
-			this.destinationPath = xmlDestionationPath + this.filename + ".xml";
+		if (xmlDestinationPath.endsWith("/")) {
+			this.destinationPath = xmlDestinationPath + this.filename + ".xml";
 		} else {
-			this.destinationPath = xmlDestionationPath + "/" + this.filename + ".xml";
+			this.destinationPath = xmlDestinationPath + "/" + this.filename + ".xml";
 		}
 	}
 	

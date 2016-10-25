@@ -14,7 +14,7 @@ public class DefaultBoxWrapper {
 	
 	public DefaultBoxWrapper(Box box) throws IOException {
 		this.box = box;
-		saveToCSVFile();		
+		//saveToCSVFile();		
 	}
 	
 	public String toString() {
@@ -27,7 +27,7 @@ public class DefaultBoxWrapper {
 	
 	public void saveToCSVFile() throws IOException {
 		Writer out = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream("/home/saverio/Projects/vft-lite/dataset/newboxes.csv", true), "UTF-8"));
+					 new FileOutputStream("/home/saverio/Projects/vft-lite/dataset/newboxes.csv", true), "UTF-8"));
 		StringBuilder text = new StringBuilder();
 		text.append(box.getType());
 		text.append(",");
