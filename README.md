@@ -13,20 +13,25 @@ Examples
 
 Parse a video file container into a xml file:
 ```bash
-java -jar vft.jar -p  -i input.mp4 -o /output_folder
+java -jar vft.jar  -p  -i input.mp4  -o /output_folder
 ```
 
 Batch parse a directory of videos. It also recreates the same subdirectory structure:
 ```bash
-java -jar vft.jar -b  -i /input_folder -o /output_folder
+java -jar vft.jar  -b  -i /input_folder  -o /output_folder
 ```
 
 Draw a tree from an input xml file:
 ```bash
-java -jar vft.jar -d  -i input.xml
+java -jar vft.jar  -d  -i input.xml
+```
+
+Merge two xml files, with or without attributes:
+```bash
+java -jar vft.jar  -m  -wa  -i input.xml  -i2 input2.xml  -o /output_folder
 ```
 
 Print help message:
 ```bash
-java -jar vft.jar -h
+java -jar vft.jar  -h
 ```
