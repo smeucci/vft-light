@@ -2,6 +2,7 @@ package tool;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.jdom2.Element;
 
 import com.coremedia.iso.IsoFile;
 
+import static util.Util.*;
 import draw.Painter;
 import io.*;
 import parse.*;
@@ -22,7 +24,7 @@ import tree.Tree;
 public class VFT {
 	 
 	private static int id = 0;
-	
+
 	public static void parse(String url, String xmlDestinationPath) throws Exception {
 		try {
 			if (url.toLowerCase().endsWith(".mp4") || url.toLowerCase().endsWith(".mov")) {
@@ -137,7 +139,7 @@ public class VFT {
 		}
 		
 		List<Element> children = root.getChildren();
-		if (children.isEmpty()) {
+		if (children.isEmpty() && !root.getName().equals("root")) {
 			tree = new Leaf(id++, root.getName(), level, father, fields);
 			return tree;
 		} else {
@@ -152,18 +154,27 @@ public class VFT {
 		return tree;
 	}
 	
-	public static void merge(String a, String b, String xmlDestinationPath) throws Exception {
-		Tree ta = buildTreeFromXMLFile(a);
-		Tree tb = buildTreeFromXMLFile(b);
-		
-		mergeTree(ta, tb);
-		
-		Document document = buildXMLDocumentFromTree(ta);
-		FileReaderSaver filesaver = new FileReaderSaver("config", xmlDestinationPath);
-		filesaver.saveOnFile(document);		
+	public static void merge(String a, String b, String xmlDestinationPath, boolean withAttributes) throws Exception {
+		try {
+			Tree ta = buildTreeFromXMLFile(a);
+			Tree tb = buildTreeFromXMLFile(b);
+			
+			mergeTree(ta, tb, withAttributes);
+			
+			Document document = buildXMLDocumentFromTree(ta);
+			FileReaderSaver fileSaver = new FileReaderSaver("merged", xmlDestinationPath);
+			fileSaver.saveOnFile(document);
+			String message = "Merged '" + a + "' and '" + b + "' on XML file: "
+					+ "'" + xmlDestinationPath + "/" + fileSaver.getFilename() + ".xml'";
+			System.out.println(message.replace("//", "/"));
+		} catch (Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			System.out.println("Could not merge '" + a + "' and '" + b + "'.");
+		}
 	}
 	
-	public static void mergeTree(Tree config, Tree tree) throws Exception {
+	public static void mergeTree(Tree config, Tree tree, boolean withAttributes) throws Exception {
 		
 		if (tree.getNumChildren() > 0) {
 			Tree toBeUpdated = null;
@@ -173,20 +184,20 @@ public class VFT {
 				Tree treeChild = treeIterator.next();
 					
 				Iterator<Tree> configIterator = config.iterator();
-				while (configIterator.hasNext() && !isPresent) {
-					Tree configChild = configIterator.next();
-					
-					if (configChild.getName().equals(treeChild.getName()) && !configChild.getName().equals("trak")) {
-						isPresent = true;
-						toBeUpdated = configChild;
-					} else if (checkTrakType(treeChild).equals("vide") && checkTrakType(configChild).equals("vide")) {	
-						isPresent = true;
-						toBeUpdated = configChild;	
-					} else if (checkTrakType(treeChild).equals("soun") && checkTrakType(configChild).equals("soun")) {
-						isPresent = true;
-						toBeUpdated = configChild;
+				if (configIterator != null) {
+					while (configIterator.hasNext() && !isPresent) {
+						Tree configChild = configIterator.next();
+						if (configChild.getName().equals(treeChild.getName()) && !configChild.getName().equals("trak")) {
+							isPresent = true;
+							toBeUpdated = configChild;
+						} else if (contains(checkTrakType(treeChild), "vide") && contains(checkTrakType(configChild), "vide")) {	
+							isPresent = true;
+							toBeUpdated = configChild;	
+						} else if (contains(checkTrakType(treeChild), "soun") && contains(checkTrakType(configChild), "soun")) {
+							isPresent = true;
+							toBeUpdated = configChild;
+						}
 					}
-					
 				}
 			
 				if (!isPresent) {
@@ -196,10 +207,67 @@ public class VFT {
 					config.addChild(toBeUpdated);
 				}
 				
-				mergeTree(toBeUpdated, treeChild);		
+				if (withAttributes) {
+					checkAttributes(toBeUpdated, treeChild);
+				}
+				
+				mergeTree(toBeUpdated, treeChild, withAttributes);		
 			}	
 		}
 	
+	}
+	
+	public static void checkAttributes(Tree config, Tree node) {
+		
+		for (Field nodeField: node.getFieldsList()) {
+			
+			String nodeFieldName = nodeField.getName();
+			String nodeFieldValue = nodeField.getValue();
+			
+			if (!nodeFieldName.equals("stuff")) {
+				String nodeSplit = nodeFieldValue.split("\\;")[0];
+				String[] nodeFieldValues = nodeSplit.replaceAll("\\[|\\]", "").split("\\,");
+				
+				Field configField = config.getFieldByName(nodeFieldName);
+				if (configField == null) {
+					config.addField(nodeField);
+					configField = config.getFieldByName(nodeFieldName);
+				}
+				
+				String configFieldValue = configField.getValue();
+				String configSplit = configFieldValue.split("\\;")[0];
+				List<String> configFieldValues = new ArrayList<String>(Arrays.asList(configSplit.replaceAll("\\[|\\]", "").split("\\,")));
+				
+				for (int i = 0; i < nodeFieldValues.length; i++) {
+					if (!configFieldValues.contains(nodeFieldValues[i])) {
+						configFieldValues.add(nodeFieldValues[i]);
+					}
+				}
+				
+				String result = formatFieldValues(configFieldValues);
+				configField.setvalue(result);		
+			}
+		}
+		
+	}
+	
+	public static String formatFieldValues(List<String> values) {
+		StringBuilder result = new StringBuilder();
+		result.append("[");
+		for (int i = 0; i < values.size(); i++) {
+			result.append(values.get(i));
+			String comma = (i == values.size() - 1) ? "" : ",";
+			result.append(comma);
+		}
+		result.append("]");
+		result.append(";[");
+		for (int j = 0; j < values.size(); j++) {
+			result.append("0");
+			String comma = (j == values.size() - 1) ? "" : ",";
+			result.append(comma);
+		}
+		result.append("]");
+		return result.toString();
 	}
 	
 	public static String checkTrakType(Tree trak) {
