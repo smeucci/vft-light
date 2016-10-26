@@ -111,6 +111,15 @@ public class Node implements Tree {
 		}
 		return null;
 	}
+	
+	public Field getFieldByName(String name) {
+		for (Field a: this.fields) {
+			if (a.getName().equals(name)) {
+				return a;
+			}
+		}
+		return null;
+	}
 
 	public List<Field> getFieldsList() {
 		return new ArrayList<Field>(this.fields);

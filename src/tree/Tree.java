@@ -24,6 +24,7 @@ public interface Tree extends Iterable<Tree> {
 	public int getIDFather();
 
 	public String getFieldValue(String name);
+	public Field getFieldByName(String name);
 	public List<Field> getFieldsList();
 	public void setFieldsList(List<Field> attr);
 	public void addField(Field f);

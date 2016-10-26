@@ -21,7 +21,11 @@ public class Leaf implements Tree {
 		this.level = level;
 		this.fields = fields;
 		this.ID = ID;
-		this.IDFather = father.getID();		
+		if (father == null) {
+			this.IDFather = -1;
+		} else {
+			this.IDFather = father.getID();
+		}	
 	}
 	
 	public Iterator<Tree> iterator() {
@@ -99,6 +103,15 @@ public class Leaf implements Tree {
 		for (Field a: this.fields) {
 			if (a.getName().equals(name)) {
 				return a.getValue();
+			}
+		}
+		return null;
+	}
+	
+	public Field getFieldByName(String name) {
+		for (Field a: this.fields) {
+			if (a.getName().equals(name)) {
+				return a;
 			}
 		}
 		return null;
