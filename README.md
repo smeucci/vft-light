@@ -5,7 +5,7 @@ Lite version of VFT based on [Vishal Sharma, Analisi Forense di Video File Conta
 Usage
 =====
 ```bash
-java -jar vft.jar [-b | -d | -h | -p]  [-i <file>] [-o <folder>]
+usage: vft [-b | -d | -h | -m | -p]   [-i <file|folder>] [-i2 <file>]  [-o <folder>]  [-wa]
 ```
 
 Examples
