@@ -21,6 +21,8 @@ public class DefaultBoxWrapper {
 		StringBuilder result = new StringBuilder();
 		result.append("{");
 		result.append("stuff=").append(this.box.toString());
+		result.append(";");
+		result.append("count=0");
 		result.append("}");		
 		return result.toString();
 	}
