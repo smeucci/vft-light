@@ -119,6 +119,7 @@ public class FileReaderSaver {
 	* This method is used to extract the Iso file from a video file (mp4-like).
 	* @return IsoFile The Iso file of the video file represented by the url
 	* attribute.
+	* @throws IOException
 	*/
 	public IsoFile getIsoFile() throws IOException {
 		//return an IsoFile, it contains all boxes of the container
@@ -135,6 +136,7 @@ public class FileReaderSaver {
 	* This method is used to save a jdom document into a xml file
 	* specified by the destinationPath attribute.
 	* @param document A jdom Document.
+	* @throws Exception
 	*/
 	public void saveOnFile(Document document) throws Exception {
 		//save document on a xml file
@@ -148,6 +150,8 @@ public class FileReaderSaver {
 	* This method is used to create a jdom document from a xml file specified
 	* by the url attribute.
 	* @return Document A jdom Document.
+	* @throws JDOMException
+	* @throws IOException
 	*/
 	public Document getDocumentFromXMLFile() throws JDOMException, IOException {
 		//create a SAXBuilder and a document
