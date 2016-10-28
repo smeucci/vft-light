@@ -34,8 +34,7 @@ public class VFT {
 				Element root = parser(isoFile);
 				//save the content of the container on a xml file using the saveOnFile function of the FileReaderSaver class
 				fileSaver.saveOnFile(new Document(root));
-				String message = "XML file '" + xmlDestinationPath + "/" + fileSaver.getFilename() + ".xml' created.";
-				System.out.println(message.replace("//", "/"));
+				System.out.println("XML file '" + fileSaver.getDestinationPath() + ".xml' created.");
 			} else {
 				System.err.println("Wrong input format. The input file should be a video file (mp4 or mov).");
 			}
@@ -162,7 +161,7 @@ public class VFT {
 			mergeTree(ta, tb, withAttributes);
 			
 			Document document = buildXMLDocumentFromTree(ta);
-			FileReaderSaver fileSaver = new FileReaderSaver("merged", xmlDestinationPath);
+			FileReaderSaver fileSaver = new FileReaderSaver("config", xmlDestinationPath);
 			fileSaver.saveOnFile(document);
 			String message = "Merged '" + a + "' and '" + b + "' on XML file: "
 					+ "'" + xmlDestinationPath + "/" + fileSaver.getFilename() + ".xml'";
@@ -277,6 +276,44 @@ public class VFT {
 			return hdlr.getFieldValue("handlerType");
 		}
 		return "";
+	}
+	
+	public static void update(String datasetPath, String outputPath, boolean withAttributes) throws Exception {
+		try {
+			Tree config;
+			if (new File(outputPath + "/config.xml").exists()) {
+				config = buildTreeFromXMLFile(outputPath + "/config.xml");
+			} else {
+				List<Field> fields = new ArrayList<Field>();
+				fields.add(new Field("modelName", "phoneBrandName"));
+				config = new Node(0, "root", 0, null, fields);
+			}
+			
+			updateConfig(config, datasetPath, withAttributes);
+			
+			Document document = buildXMLDocumentFromTree(config);
+			FileReaderSaver fileSaver = new FileReaderSaver("config", outputPath);
+			fileSaver.saveOnFile(document);
+			System.out.println("Created '" + fileSaver.getDestinationPath() + "'");
+		} catch (Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			System.out.println("Could not create config file from dataset folder '" + datasetPath + "'.");
+		}
+	}
+	
+	public static void updateConfig(Tree config, String datasetPath, boolean withAttributes) throws Exception {
+		
+		File folder = new File(datasetPath);
+		File[] files = folder.listFiles();
+		for (File f: files) {
+			if (f.isFile() && !f.getName().startsWith(".") && !f.getName().endsWith("~") && !f.getName().equals("config.xml")) {
+				System.out.println("Merging xml file: " + f.getAbsolutePath());
+				mergeTree(config, buildTreeFromXMLFile(f.getAbsolutePath()), withAttributes);
+			} else if (f.isDirectory()) {
+				updateConfig(config, f.getAbsolutePath(), withAttributes);
+			}
+		}
 	}
 	
 }

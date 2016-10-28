@@ -5,7 +5,7 @@ import org.apache.commons.cli.*;
 
 public class Menu {
 	
-	public static void main(String args[]) throws Exception {
+	public static void main(String args[]) throws Exception {		
 		
 		CommandLine cmd = parseArguments(args);
 		if (cmd.hasOption("parse")) {
@@ -28,6 +28,14 @@ public class Menu {
 			} else {
 				merge(input1, input2, output, false);
 			}
+		} else if (cmd.hasOption("update-config")) {
+			String input = cmd.getOptionValue("input");
+			String output = cmd.getOptionValue("output");
+			if (cmd.hasOption("with-attributes")) {
+				update(input, output, true);
+			} else {
+				update(input, output, false);
+			}
 		}
 	}
 	
@@ -40,6 +48,7 @@ public class Menu {
 		group.addOption(new Option("p", "parse", false, "parse a video file container into a xml file"));
 		group.addOption(new Option("b", "batch", false, "batch parse a directory of video files; it recreates the same folder structure"));
 		group.addOption(new Option("m", "merge", false, "merge two xml file into one"));
+		group.addOption(new Option("u", "update-config", false, "merge all files in the dataset folder into a config.xml file"));
 		group.addOption(new Option("h", "help", false, "print help message"));
 		opts.addOptionGroup(group);
 		
@@ -47,7 +56,7 @@ public class Menu {
 				.longOpt("input")
 				.argName("file|folder")
 				.hasArg()
-				.desc("video file for --parse, xml file for --draw, a folder for --batch")
+				.desc("video file for --parse, xml file for --draw, a folder for --batch and --update-config")
 				.build();
 		opts.addOption(input_opt);
 		
@@ -63,14 +72,14 @@ public class Menu {
 				.longOpt("output")
 				.argName("folder")
 				.hasArg()
-				.desc("output folder for the xml file, only for --parse")
+				.desc("output folder for the xml file,for --parse, --merge and --update-config")
 				.build();
 		opts.addOption(output_opt);
 		
 		Option withAttributes_opt = Option.builder("wa")
-				.longOpt("withAttributes")
+				.longOpt("with-attributes")
 				.argName("boolean")
-				.desc("whether to consider attributes in --merge or not. Default is false")
+				.desc("whether to consider attributes in --merge and --update-config or not. Default is false")
 				.build();
 		opts.addOption(withAttributes_opt);
 		
@@ -104,6 +113,10 @@ public class Menu {
 	        System.exit(0);
 	    } else if (cl.hasOption("m") && (!cl.hasOption("i") ||!cl.hasOption("i2"))) {
 	    	System.err.println("Missing options: [i | i2]");
+	    	formatter.printHelp("vft", opts, true);
+	        System.exit(0);
+	    } else if (cl.hasOption("u") && (!cl.hasOption("i") || !cl.hasOption("o"))) {
+	    	System.err.println("Missing options: [i | o]");
 	    	formatter.printHelp("vft", opts, true);
 	        System.exit(0);
 	    }
