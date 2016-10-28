@@ -5,7 +5,8 @@ Lite version of VFT based on [Vishal Sharma, Analisi Forense di Video File Conta
 Usage
 =====
 ```bash
-usage: vft [-b | -d | -h | -m | -p]   [-i <file|folder>] [-i2 <file>]  [-o <folder>]  [-wa]
+ vft [-b | -d | -h | -m | -p | -u]   [-i <file|folder>] [-i2 <file>]  [-o <folder>]  [-wa]
+
 ```
 
 Examples
@@ -29,6 +30,11 @@ java -jar vft.jar  -d  -i input.xml
 Merge two xml files, with or without attributes:
 ```bash
 java -jar vft.jar  -m  -wa  -i input.xml  -i2 input2.xml  -o /output_folder
+```
+
+Merge all xml files given a directory into a xml file saved in /output_folder, with or without attributes. It also consider subdirectories:
+```bash
+java -jar vft.jar  -u  -wa  -i /input_folder  -o /output_folder
 ```
 
 Print help message:
