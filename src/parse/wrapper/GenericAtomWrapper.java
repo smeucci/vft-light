@@ -5,14 +5,33 @@ import com.googlecode.mp4parser.boxes.apple.CleanApertureAtom;
 import com.googlecode.mp4parser.boxes.apple.TrackEncodedPixelsDimensionsAtom;
 import com.googlecode.mp4parser.boxes.apple.TrackProductionApertureDimensionsAtom;
 
+/**
+ * <h1>Wrapper for the CleanApertureAtom, TrackProductionApertureDimensionsAtom and TrackEncodedPixelsDimensionsAtom
+ *  classes of mp4parser</h1>
+ * <p>GenericAtomWrapper implements the Wrapper interface 
+ * and it is used to extend the Box classes
+ * of the mp4parser with a formatted toString method which return
+ * the attributes of the Box as a String.</p>
+ * 
+ * @author Saverio Meucci
+ *
+ */
 public class GenericAtomWrapper implements Wrapper {
 
 	private AbstractFullBox box;
 	
+	/**
+	 * The constructor of the GenericAtomWrapper class.
+	 * @param box A box of type AbstractFullBox.
+	 */
 	public GenericAtomWrapper(AbstractFullBox box) {
 		this.box = box;
 	}
 	
+	/**
+	 * Get the attributes of the Box as a String.
+	 * @return The attributes of the Box as String.
+	 */
 	public String toString() {
 		double width = 0, height = 0;
 		int version = 0, flags = 0;

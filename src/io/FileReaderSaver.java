@@ -13,11 +13,11 @@ import org.jdom2.output.XMLOutputter;
 import com.coremedia.iso.IsoFile;
 
 /**
-* <h1>Save and read files.</h1>
-* The FileReaderSaver implements a class that can be used to
+* <h1>Save and read files</h1>
+* <p>The FileReaderSaver implements a class that can be used to
 * save jdom document into xml files and read xml files or video
 * files. 
-* <p>
+* </p>
 *
 * @author  Saverio Meucci
 */

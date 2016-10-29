@@ -28,14 +28,34 @@ import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
 import com.mp4parser.iso14496.part12.BitRateBox;
 import com.mp4parser.iso14496.part15.AvcConfigurationBox;
 
+/**
+ * <h1>Parse mp4-like video file containers</h1>
+ * <p>The BoxParser class is used to parse video file containers into
+ * jdom Element</p>
+ * 
+ * @author Saverio Meucci
+ *
+ */
 public class BoxParser {
 
 	private IsoFile isoFile;
 	
+	/**
+	 * The constructor of the BoxParser class.
+	 * @param isoFile The IsoFile object represents
+	 * the video file containers.
+	 */
 	public BoxParser(IsoFile isoFile) {
 		this.isoFile = isoFile;
 	}
 	
+	/**
+	 * This method builds a jdom Element representing the tree-like
+	 * structur of the container.
+	 * @param ab AbstractContainerBox from googlecode.mp4parser.
+	 * @param root The jdom Element to build.
+	 * @throws Exception
+	 */
 	public void getBoxes(AbstractContainerBox ab, Element root) throws Exception {
 		List<Box> boxes = (ab == null) ? (this.isoFile.getBoxes()) : (ab.getBoxes());
 		
@@ -59,14 +79,24 @@ public class BoxParser {
 		}
 	}
 	
+	/**
+	 * This method is used to extract the couple name=value from
+	 * a string separated by comma.
+	 * @param str The string to parse.
+	 * @return An array of string representing the couple name=value.
+	 */
 	protected String[] extractNameValue(String str) {
-		//return a string vector containing the couple name=value for the input box
 		String init = removeBrackets(str, "}");
 		return init.split("\\{")[1].split("\\;|\\,");
 	}
 	
+	/**
+	 * This method separate the couple name=value in order to set attributes for
+	 * the jdom Element.
+	 * @param item The jdom Element.
+	 * @param str An array of string, which contains couple name=value.
+	 */
 	protected void separateNameValue(Element item, String[] str) {
-		//return an item with attributes in the form of name="value"
 		String[] result = null;			   
 		for (String s: str) {			
 			result = s.split("\\=");
@@ -79,6 +109,15 @@ public class BoxParser {
 		}			
 	}
 	
+	/**
+	 * This method is used to parse the attributes of a Box
+	 * of the container. Base on the type a different parsing will
+	 * be implemented.
+	 * @param box The Box to parse.
+	 * @param boxType The type of the Box to parse.
+	 * @return A string containing the attibutes of the Box.
+	 * @throws IOException
+	 */
 	protected String parseBoxAttributesAsString(Box box, String boxType) throws IOException {
 				
 		String attr = null;

@@ -21,10 +21,24 @@ import tree.Leaf;
 import tree.Node;
 import tree.Tree;
 
+/**
+ * <h1>The VFT core</h1>
+ * <p>VFT is a static class that implements methods to parse
+ * and elaborate xml file, jdom Element and Document objects, and Tree objects.
+ * 
+ * @author Saverio Meucci
+ */
 public class VFT {
 	 
 	private static int id = 0;
 
+	/**
+	 * This method serves as an interface for the cli app to parse
+	 * a mp4-like video container into a xml file.
+	 * @param url The path of the video file.
+	 * @param xmlDestinationPath The folder where to save the resulting xml file.
+	 * @throws Exception
+	 */
 	public static void parse(String url, String xmlDestinationPath) throws Exception {
 		try {
 			if (url.toLowerCase().endsWith(".mp4") || url.toLowerCase().endsWith(".mov")) {
@@ -45,6 +59,11 @@ public class VFT {
 		}
 	}
 	
+	/**
+	 * This method is used to parse a IsoFile into a jdom Element.
+	 *  @param isoFile The IsoFile representing the container of the video file.
+	 *  @return A jdom Element.
+	 */
 	public static Element parser(IsoFile isoFile) throws Exception {
 		Element root = new Element("root");
 		//TODO modelName and phoneBrandName should be read from the console during the parsing phase
@@ -54,6 +73,14 @@ public class VFT {
 		return root;
 	}
 	
+	/**
+	 * This method servers as an interface for the cli app to
+	 * parse a directory of video file containers. It also considers sufolders
+	 * and recreates the same folder structure for the outputted xml files.
+	 * @param datasetPath The path of the folder that needs to be parsed.
+	 * @param outputPath The folder where the xml files will be saved.
+	 * @throws Exception
+	 */
 	public static void batch(String datasetPath, String outputPath) throws Exception {
 		File datasetFolder = new File(datasetPath);
 		if (!datasetFolder.exists() || !datasetFolder.isDirectory()) {
@@ -66,6 +93,13 @@ public class VFT {
 		}
 	}
 	
+	/**
+	 * This method is used to parse a directory of video file containers. It also considers subfolders
+	 * and recreates the same folder structure for the outputted xml files.
+	 * @param folder A File objects representing the folder under consideration.
+	 * @param outputPath The path where to save the xml files.
+	 * @throws Exception
+	 */
 	public static void parseDirectory(File folder, String outputPath) throws Exception {
 		File[] files = folder.listFiles();
 		for (File f: files) {
@@ -79,6 +113,13 @@ public class VFT {
 		}
 	}
 	
+	/**
+	 * This method serves as an interface for the cli app to
+	 * draw a tree into a JFrame window, given an xml file.
+	 * @param url The path of the xml file.
+	 * @param name The name of the window.
+	 * @throws Exception
+	 */
 	public static void draw(String url, String name) throws Exception {
 		if (url.endsWith(".xml")) {
 			Tree tree = buildTreeFromXMLFile(url);
@@ -88,6 +129,12 @@ public class VFT {
 		}
 	}
 	
+	/**
+	 * This method is used to build a Tree object given a xml files.
+	 * @param url The path of the xml file to be drawn.
+	 * @return A Tree object representing the xml file.
+	 * @throws Exception
+	 */
 	public static Tree buildTreeFromXMLFile(String url) throws Exception {
 		FileReaderSaver fileReader = new FileReaderSaver(url);
 		Document document = fileReader.getDocumentFromXMLFile();
@@ -96,17 +143,37 @@ public class VFT {
 		return tree;
 	}
 	
+	/**
+	 * This method is used to build a Tree object given a jdom Document
+	 * representing the xml file.
+	 * @param document The jdom Document representing the xml file.
+	 * @return A Tree object representing the jdom Document.
+	 * @throws Exception
+	 */
 	public static Tree buildTreeFromXMLDocument(Document document) throws Exception {
 		Element root = document.getRootElement();
 		Tree tree = buildTree(root, null, 0);
 		return tree;
 	}
 	
+	/**
+	 * This method is used to build a jdom Document from a Tree object.
+	 * @param tree The Tree object.
+	 * @return A jdom Document representing the Tree object.
+	 * @throws Exception
+	 */
 	public static Document buildXMLDocumentFromTree(Tree tree) throws Exception {
 		Element root = buildXML(tree);
 		return new Document(root);
 	}
 	
+	/**
+	 * This method is used to build a xml file, represented as a jdom Element
+	 * given a Tree object.
+	 * @param tree The Tree object to represent.
+	 * @return A jdom Element representing the Tree object.
+	 * @throws Exception
+	 */
 	public static Element buildXML(Tree tree) throws Exception {
 		Element root = new Element(tree.getName());
 		List<Field> fields = tree.getFieldsList();
@@ -126,6 +193,14 @@ public class VFT {
 		return root;
 	}
 	
+	/**
+	 * This method is used to build a Tree object, given a jdom Element.
+	 * @param root The jdom Element to represent.
+	 * @param father A Tree object representing the father.
+	 * @param level An integer representing the level of depth of the Tree object.
+	 * @return A Tree object representing a jdom Element.
+	 * @throws Exception
+	 */
 	public static Tree buildTree(Element root, Tree father, int level) throws Exception {
 		Tree tree;
 		List<Attribute> attr = root.getAttributes();
@@ -153,6 +228,16 @@ public class VFT {
 		return tree;
 	}
 	
+	/**
+	 * This method serves as an interface to merge two xml file
+	 * into a single one. Can consider tag only and
+	 * also attributes values.
+	 * @param a The path of the first xml file.
+	 * @param b The path of the second xml file.
+	 * @param xmlDestinationPath The path where to save the merged xml file.
+	 * @param withAttributes A boolean to determined is attributes need to be considered.
+	 * @throws Exception
+	 */
 	public static void merge(String a, String b, String xmlDestinationPath, boolean withAttributes) throws Exception {
 		try {
 			Tree ta = buildTreeFromXMLFile(a);
@@ -173,6 +258,14 @@ public class VFT {
 		}
 	}
 	
+	/**
+	 * Given two Tree objects, merge them into a the first Tree object.
+	 * Can consider tag only and also attributes values.
+	 * @param config The Tree object that will be updated by the second.
+	 * @param tree The Tree object to merge.
+	 * @param withAttributes Whether or not consider attributes.
+	 * @throws Exception
+	 */
 	public static void mergeTree(Tree config, Tree tree, boolean withAttributes) throws Exception {
 		
 		if (tree.getNumChildren() > 0) {
@@ -216,6 +309,15 @@ public class VFT {
 	
 	}
 	
+	/**
+	 * This method, given two Tree objects with the same name and at the same
+	 * level, check if attributes are equals. If an attributes of the second
+	 * Tree object contains a value that is not present for the same attribute
+	 * in the first Tree object, adds that new value to the attribute of the
+	 * first Tree object.
+	 * @param config The Tree object that will be updated by the second.
+	 * @param tree The Tree object to merge.
+	 */
 	public static void checkAttributes(Tree config, Tree node) {
 		
 		for (Field nodeField: node.getFieldsList()) {
@@ -250,6 +352,12 @@ public class VFT {
 		
 	}
 	
+	/**
+	 * Format attributes value, when a new value is added.
+	 * @param values A list of string of new values for an attribute.
+	 * @return A formatted string that represents the new value for
+	 * an attribute of the first Tree object.
+	 */
 	public static String formatFieldValues(List<String> values) {
 		StringBuilder result = new StringBuilder();
 		result.append("[");
@@ -269,6 +377,11 @@ public class VFT {
 		return result.toString();
 	}
 	
+	/**
+	 * This method is used to determine the type of the Tree with name "trak".
+	 * @param trak The Tree object with name "trak".
+	 * @return The type of the trak; empty if the type cannot be determined.
+	 */
 	public static String checkTrakType(Tree trak) {
 		if (trak instanceof Node && trak.getName().equals("trak")) {
 			Node mdia = (Node) ((Node) trak).getChildByName("mdia");
@@ -278,6 +391,15 @@ public class VFT {
 		return "";
 	}
 	
+	/**
+	 * This method servers as an interface for the cli app to merge all xml files
+	 * of a directory into one. It also considers subfolders.
+	 * Can consider tag only and also attributes values.
+	 * @param datasetPath The path of the folder containing the xml files.
+	 * @param outputPath The path where to save the merged xml files.
+	 * @param withAttributes Whether or not consider attributes.
+	 * @throws Exception
+	 */
 	public static void update(String datasetPath, String outputPath, boolean withAttributes) throws Exception {
 		try {
 			Tree config;
@@ -302,6 +424,14 @@ public class VFT {
 		}
 	}
 	
+	/**
+	 * This method is used to create a Tree object by merging all xml files in a
+	 * given folder. Can consider tag only and also attributes values.
+	 * @param config The Tree object that represent the merging.
+	 * @param datasetPath The path of the folder containing the xml files.
+	 * @param withAttributes Wheter or not consider the attributes.
+	 * @throws Exception
+	 */
 	public static void updateConfig(Tree config, String datasetPath, boolean withAttributes) throws Exception {
 		
 		File folder = new File(datasetPath);

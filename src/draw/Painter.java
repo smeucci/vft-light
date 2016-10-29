@@ -8,11 +8,27 @@ import javax.swing.JFrame;
 
 import tree.Tree;
 
+/**
+ * <h1>Create a JFrame window and draw a tree</h1>
+ * <p>The Painter class is used to create a JFrame window in which
+ * a Tree object will be drawn.
+ * </p>
+ * 
+ * @author Saverio Meucci
+ * 
+ */
 public class Painter {
 
 	private static JFrame window;
 	private static Panel panel;
 	
+	/**
+	 * This method is used to create the window and draw the Tree object.
+	 * @param tree The Tree object to be drawn.
+	 * @param x The width of the window.
+	 * @param y The height of the window.
+	 * @param name The name of the window.
+	 */
 	public static void painter(Tree tree, int x, int y, String name) {
 		
 		window = new JFrame(name);

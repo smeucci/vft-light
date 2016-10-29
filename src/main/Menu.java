@@ -1,10 +1,23 @@
+package main;
 
 import static tool.VFT.*;
 
 import org.apache.commons.cli.*;
 
+/**
+ * <h1>VFT cli app</h1>
+ * <p>The Menu class is the main entry point the app.</p>
+ * @author saverio
+ *
+ */
 public class Menu {
 	
+	/**
+	 * Main functions of the app. It executes the selected functions given arguments as
+	 * input.
+	 * @param args Input arguments.
+	 * @throws Exception
+	 */
 	public static void main(String args[]) throws Exception {		
 		
 		CommandLine cmd = parseArguments(args);
@@ -39,6 +52,11 @@ public class Menu {
 		}
 	}
 	
+	/**
+	 * This method is used to parse the input arguments.
+	 * @param args The imput arguments.
+	 * @return A CommandLine object that contains the parsed input arguments.
+	 */
 	private static CommandLine parseArguments(String[] args) {
 		
 		Options opts = new Options();

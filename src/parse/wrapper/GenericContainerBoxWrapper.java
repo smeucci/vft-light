@@ -5,14 +5,32 @@ import com.coremedia.iso.boxes.MetaBox;
 import com.coremedia.iso.boxes.SampleDescriptionBox;
 import com.googlecode.mp4parser.AbstractContainerBox;
 
+/**
+ * <h1>Wrapper for the DataReferenceBox, SampleDescriptionBox and MetaBox classes of mp4parser</h1>
+ * <p>GenericContainerBoxWrapper implements the Wrapper interface 
+ * and it is used to extend the Box classes
+ * of the mp4parser with a formatted toString method which return
+ * the attributes of the Box as a String.</p>
+ * 
+ * @author Saverio Meucci
+ *
+ */
 public class GenericContainerBoxWrapper implements Wrapper {
 
 	private AbstractContainerBox box;
 	
+	/**
+	 * The constructor of the GenericContainerBoxWrapper class.
+	 * @param box A box of type AbstractContainerBox.
+	 */
 	public GenericContainerBoxWrapper(AbstractContainerBox box) {
 		this.box = box;
 	}
 	
+	/**
+	 * Get the attributes of the Box as a String.
+	 * @return The attributes of the Box as String.
+	 */
 	public String toString() {
 		int version = 0, flags = 0;
 		if (this.box instanceof DataReferenceBox) {

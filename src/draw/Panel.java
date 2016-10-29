@@ -14,6 +14,14 @@ import javax.swing.JPanel;
 import tree.ConcreteVisitor;
 import tree.Tree;
 
+/**
+ * <h1>Draw a Tree object</h1>
+ * <p>The Panel class extends JPanel from javax.swing. It is used to draw
+ * Tree objects</p>
+ * 
+ * @author Saverio Meucci
+ *
+ */
 public class Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -25,6 +33,12 @@ public class Panel extends JPanel {
 	private int y_start = 30;
 	private LinkedList<Tree> result;
 	
+	/**
+	 * The constructor of the Panel class.
+	 * @param tree The Tree object to be drawn.
+	 * @param x The widht of the window.
+	 * @param y The height of the window.
+	 */
 	public Panel(Tree tree, int x, int y) {
 		this.x_values = new int[30];
 		initialize();
@@ -34,6 +48,10 @@ public class Panel extends JPanel {
 		setPreferredSize(new Dimension(x, y));	
 	}
 	
+	/**
+	 * This method initialize the x_values array used to separate the nodes
+	 * of the Tree object.
+	 */
 	private void initialize() {
 		x_values[0] = 568;
 		for (int i = 1; i < x_values.length; i++) {
@@ -41,12 +59,21 @@ public class Panel extends JPanel {
 		}
 	}
 
+	/**
+	 * Get the x_value for a node given its level.
+	 * @param level The level of the node.
+	 * @return The corresponding x_value.
+	 */
 	public int getX(int level){
 		x_values[level] = (x_values[level] > 1500) ? 32 : x_values[level] + 32;
 		x_start = x_values[level];
 		return x_start;
 	}
 	
+	/**
+	 * This method draw the Tree object in the window.
+	 * @param g Graphics object used to draw.
+	 */
 	public void paintComponent(Graphics g) {		
 		g.setFont(new Font("SansSerif", Font.BOLD,10));
 		ConcreteVisitor visitor = new ConcreteVisitor();
@@ -76,6 +103,11 @@ public class Panel extends JPanel {
 		drawArchs(g);
 	}
 	
+	/**
+	 * This method is used to draw archs between nodes of
+	 * tree.
+	 * @param g Graphics object used to draw.
+	 */
 	public void drawArchs(Graphics g) {
 		Color c = new Color(236, 78, 46);
 		g.setColor(c);
