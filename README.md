@@ -1,6 +1,9 @@
 # vft-lite
 Lite version of VFT based on [Vishal Sharma, Analisi Forense di Video File Container, 2015/16].
 
+Javadoc
+=======
+[LINK](https://smeucci.github.io/vft-lite/ "vft-lite javadoc")
 
 Usage
 =====
