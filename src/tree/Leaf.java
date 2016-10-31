@@ -252,10 +252,9 @@ public class Leaf implements Tree {
 	}
 	
 	/**
-	 * This method is used to represents as string
-	 * the attribute of the leaf as string.
-	 * @return It returns the attributes of the 
-	 * leaf as string.
+	 * This method is used to clone a Tree object.
+	 * @return It returns a new Tree that is
+	 * a clone of the node.
 	 */
 	public Tree clone() {
 		return new Leaf(this.ID, this.name, this.level, this.father, this.fields);
