@@ -11,7 +11,7 @@ import org.apache.commons.cli.*;
  *
  */
 public class Menu {
-	
+		
 	/**
 	 * Main functions of the app. It executes the selected functions given arguments as
 	 * input.
@@ -19,7 +19,7 @@ public class Menu {
 	 * @throws Exception
 	 */
 	public static void main(String args[]) throws Exception {		
-		
+				
 		CommandLine cmd = parseArguments(args);
 		if (cmd.hasOption("parse")) {
 			String input = cmd.getOptionValue("input");

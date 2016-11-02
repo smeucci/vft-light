@@ -30,7 +30,7 @@ public class GenericBoxWrapper implements Wrapper {
 	 */
 	public String toString() {
 		StringBuilder result = new StringBuilder();
-		result.append(box.toString().replaceAll("\\]|\\}", "").replace("[", "{"));
+		result.append(this.box.toString().replaceAll("\\]|\\}", "").replace("[", "{"));
 		result.append(";");
 		result.append("version=").append(this.box.getVersion());
 		result.append(";");

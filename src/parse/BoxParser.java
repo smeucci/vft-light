@@ -16,6 +16,7 @@ import com.coremedia.iso.boxes.FileTypeBox;
 import com.coremedia.iso.boxes.HandlerBox;
 import com.coremedia.iso.boxes.OriginalFormatBox;
 import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.coremedia.iso.boxes.TrackHeaderBox;
 import com.coremedia.iso.boxes.fragment.MovieExtendsHeaderBox;
 import com.coremedia.iso.boxes.fragment.MovieFragmentBox;
 import com.coremedia.iso.boxes.fragment.TrackExtendsBox;
@@ -134,11 +135,13 @@ public class BoxParser {
 		case "frma":
 			attr = new OriginalFormatBoxWrapper((OriginalFormatBox) box).toString();
 			break;
-		case "mvhd": case "tkhd": case "mdhd": case "vmhd": case "smhd":
-		case "stts": case "stss": case "stsc": case "stsz": case "stco":
-		case "sidx": case "mfhd": case "tfhd": case "tfdt": case "trun":
-		case "co64":
+		case "mvhd": case "mdhd": case "vmhd": case "smhd": case "stts": 
+		case "stss": case "stsc": case "stsz": case "stco": case "sidx": 
+		case "mfhd": case "tfhd": case "tfdt": case "trun": case "co64":
 			attr = new GenericBoxWrapper((AbstractFullBox) box).toString();
+			break;
+		case "tkhd":
+			attr = new TrackHeaderBoxWrapper((TrackHeaderBox) box).toString();
 			break;
 		case "clef": case "prof": case "enof":
 			attr = new GenericAtomWrapper((AbstractFullBox) box).toString();
