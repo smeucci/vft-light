@@ -21,7 +21,7 @@ Examples
 
 Parse a video file container into a xml file:
 ```bash
-bin/vft  -p  -i input.mp4  -o /output_folder
+vft  -p  -i input.mp4  -o /output_folder
 ```
 
 Batch parse a directory of videos. It also recreates the same subdirectory structure:
