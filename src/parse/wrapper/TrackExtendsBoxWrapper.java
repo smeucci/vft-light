@@ -44,6 +44,8 @@ public class TrackExtendsBoxWrapper {
 		result.append("version=").append(this.trex.getVersion());
 		result.append(";");
 		result.append("flags=").append(this.trex.getFlags());
+		result.append(";");
+		result.append("count=0");
 		result.append("}");
 		return result.toString();
 	}

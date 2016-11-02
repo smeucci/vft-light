@@ -39,6 +39,8 @@ public class SampleDependencyTypeBoxWrapper implements Wrapper {
 		result.append("version=").append(this.sdtp.getVersion());
 		result.append(";");
 		result.append("flags=").append(this.sdtp.getFlags());
+		result.append(";");
+		result.append("count=0");
 		result.append("}");
 		return result.toString();
 	}

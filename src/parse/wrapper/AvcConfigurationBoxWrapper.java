@@ -32,7 +32,10 @@ public class AvcConfigurationBoxWrapper implements Wrapper {
 	public String toString() {
 		StringBuilder result = new StringBuilder();
 		AvcDecoderConfigurationRecord record = this.avcC.getavcDecoderConfigurationRecord();
-		result.append(record.toString());
+		result.append(record.toString().replace("}", ""));
+		result.append(";");
+		result.append("count=0");
+		result.append("}");
 		return result.toString();
 	}
 }

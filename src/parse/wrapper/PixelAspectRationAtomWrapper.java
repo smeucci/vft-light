@@ -34,6 +34,8 @@ public class PixelAspectRationAtomWrapper {
 		result.append("hSpacing=").append(this.pasp.gethSpacing());
         result.append(";");
         result.append("vSpacing=").append(this.pasp.getvSpacing());
+        result.append(";");
+		result.append("count=0");
         result.append("}");
 		return result.toString();
 	}

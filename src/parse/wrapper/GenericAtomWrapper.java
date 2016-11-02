@@ -61,6 +61,8 @@ public class GenericAtomWrapper implements Wrapper {
         result.append("version=").append(version);
         result.append(";");
         result.append("flags=").append(flags);
+        result.append(";");
+		result.append("count=0");
         result.append("}");
 		return result.toString();		
 	}

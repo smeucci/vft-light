@@ -36,6 +36,8 @@ public class BitRateBoxWrapper {
         result.append("maxBitRate=").append(this.btrt.getMaxBitrate());
         result.append(";");
         result.append("avgBitRate=").append(this.btrt.getAvgBitrate());
+        result.append(";");
+		result.append("count=0");
         result.append("}");
 		return result.toString();
 	}

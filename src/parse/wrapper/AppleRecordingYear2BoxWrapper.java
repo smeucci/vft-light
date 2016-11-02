@@ -40,6 +40,8 @@ public class AppleRecordingYear2BoxWrapper implements Wrapper {
 		result.append("language=").append(this.day.getLanguageString());
 		result.append(";");
 		result.append("value=").append(this.day.getValue());
+		result.append(";");
+		result.append("count=0");
 		result.append("}");
 		return result.toString();	
 	}

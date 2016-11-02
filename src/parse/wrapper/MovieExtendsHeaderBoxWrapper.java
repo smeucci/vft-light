@@ -36,6 +36,8 @@ public class MovieExtendsHeaderBoxWrapper {
 		result.append("version=").append(this.mehd.getVersion());
 		result.append(";");
 		result.append("flags=").append(this.mehd.getFlags());
+		result.append(";");
+		result.append("count=0");
 		result.append("}");
 		return result.toString();
 	}

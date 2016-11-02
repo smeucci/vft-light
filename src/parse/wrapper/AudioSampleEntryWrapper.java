@@ -49,7 +49,9 @@ public class AudioSampleEntryWrapper implements Wrapper {
         result.append(";");
         result.append("sampleSize=").append(this.mp4a.getSampleSize());
         result.append(";");
-        result.append("channelCount=").append(this.mp4a.getChannelCount());        
+        result.append("channelCount=").append(this.mp4a.getChannelCount());
+        result.append(";");
+		result.append("count=0");
         result.append("}");
         return result.toString();
 	}

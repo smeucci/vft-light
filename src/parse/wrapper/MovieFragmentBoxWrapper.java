@@ -29,7 +29,7 @@ public class MovieFragmentBoxWrapper {
 	 * @return The attributes of the Box as String.
 	 */
 	public String toString() {
-		return "{trackCount=" + this.moof.getTrackCount() + "}";
+		return "{trackCount=" + this.moof.getTrackCount() + ";count=0}";
 	}
 	
 }

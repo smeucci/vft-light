@@ -41,6 +41,8 @@ public class FileTypeBoxWrapper {
 			result.append(";");
 			result.append("compatibleBrand_" + (i + 1) + "=").append(compatibleBrands.get(i));
 		}
+		result.append(";");
+		result.append("count=0");
 		result.append("}");
 		return result.toString();		
 	}

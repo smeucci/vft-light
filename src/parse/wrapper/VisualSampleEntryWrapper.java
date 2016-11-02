@@ -46,6 +46,8 @@ public class VisualSampleEntryWrapper implements Wrapper {
         result.append("compressorname=").append(this.avc1.getCompressorname());
         result.append(";");
         result.append("depth=").append(this.avc1.getDepth());
+        result.append(";");
+		result.append("count=0");
         result.append("}");
         return result.toString();
 	}

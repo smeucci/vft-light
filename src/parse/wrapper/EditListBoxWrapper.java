@@ -37,6 +37,8 @@ public class EditListBoxWrapper implements Wrapper {
         result.append("version=").append(this.elst.getVersion());
         result.append(";");
         result.append("flags=").append(this.elst.getFlags());
+        result.append(";");
+		result.append("count=0");
         result.append("}");
 		return result.toString();
 	}

@@ -29,7 +29,7 @@ public class AppleGPSCoordinatesBoxWrapper {
 	 * @return The attributes of the Box as String.
 	 */
 	public String toString() {
-		return "{gpscoords=" + this.xyz.getValue() + "}";
+		return "{gpscoords=" + this.xyz.getValue() + ";count=0}";
 	}
 	
 }

@@ -14,10 +14,12 @@ import com.coremedia.iso.boxes.Box;
 import com.coremedia.iso.boxes.EditListBox;
 import com.coremedia.iso.boxes.FileTypeBox;
 import com.coremedia.iso.boxes.HandlerBox;
+import com.coremedia.iso.boxes.OriginalFormatBox;
 import com.coremedia.iso.boxes.SampleDependencyTypeBox;
 import com.coremedia.iso.boxes.fragment.MovieExtendsHeaderBox;
 import com.coremedia.iso.boxes.fragment.MovieFragmentBox;
 import com.coremedia.iso.boxes.fragment.TrackExtendsBox;
+import com.coremedia.iso.boxes.mdat.MediaDataBox;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 import com.googlecode.mp4parser.AbstractContainerBox;
@@ -127,10 +129,10 @@ public class BoxParser {
 			attr = new FileTypeBoxWrapper((FileTypeBox) box).toString();
 			break;
 		case "mdat":
-			attr = box.toString();
+			attr = new MediaDataBoxWrapper((MediaDataBox) box).toString();
 			break;
 		case "frma":
-			attr = box.toString().replace("[", "{").replace("]", "}");
+			attr = new OriginalFormatBoxWrapper((OriginalFormatBox) box).toString();
 			break;
 		case "mvhd": case "tkhd": case "mdhd": case "vmhd": case "smhd":
 		case "stts": case "stss": case "stsc": case "stsz": case "stco":

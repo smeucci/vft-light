@@ -38,6 +38,6 @@ public class ESDescriptorBoxWrapper implements Wrapper {
 		for (int i = 1; i < splits.length; i++) {
 			result = result + splits[i];
 		}
-		return "{" + result + "}";
+		return "{" + result + ";count=0}";
 	}
 }

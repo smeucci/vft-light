@@ -35,6 +35,8 @@ public class GenericBoxWrapper implements Wrapper {
 		result.append("version=").append(this.box.getVersion());
 		result.append(";");
 		result.append("flags=").append(this.box.getFlags());
+		result.append(";");
+		result.append("count=0");
 		result.append("}");
 		return result.toString();
 	}
