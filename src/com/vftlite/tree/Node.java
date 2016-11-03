@@ -266,12 +266,32 @@ public class Node implements Tree {
 	}
 	
 	/**
-	 * This method is used to clone a Tree object.
+	 * This method is used to clone a Tree object. Shallow copy.
 	 * @return It returns a new Tree that is
 	 * a clone of the node.
 	 */
 	public Tree clone() {
 		return new Node(this.ID, this.name, this.level, this.father, this.fields);
+	}
+	
+	/**
+	 * This method is used to clone a Tree object. 
+	 * Deep copy: it also clones the children and the field objects.
+	 * @return It returns a new Tree that is
+	 * a clone of the tree.
+	 */
+	public Tree cloneAll() throws Exception {
+		List<Field> fields = new ArrayList<Field>();
+		for (Field f: this.fields) {
+			fields.add(new Field(f.getName(), f.getValue()));
+		}
+		Tree t = new Node(this.ID, this.name, this.level, this.father, fields);
+		for (Tree child: this.children) {
+			Tree c = child.cloneAll();
+			c.setFather(t);
+			t.addChild(c);
+		}
+		return t;
 	}
 	
 	/**
