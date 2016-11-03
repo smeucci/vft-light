@@ -151,15 +151,15 @@ public interface Tree extends Iterable<Tree> {
 	public Tree getChildByName(String name);
 	
 	/**
-	 * This method is used to clone a Tree object. Shallow copy.
+	 * This method is used to clone (shallow copy) a Tree object.
 	 * @return It returns a new Tree that is
 	 * a clone of the tree.
 	 */
 	public Tree clone();
 	
 	/**
-	 * This method is used to clone a Tree object. 
-	 * Deep copy: it also clones the children and the field objects.
+	 * This method is used to clone (deep copy) a Tree object. 
+	 * It also clones the children and the field objects.
 	 * @return It returns a new Tree that is
 	 * a deep copy of the tree.
 	 * @throws Exception

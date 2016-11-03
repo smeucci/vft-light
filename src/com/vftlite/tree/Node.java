@@ -266,7 +266,7 @@ public class Node implements Tree {
 	}
 	
 	/**
-	 * This method is used to clone a Tree object. Shallow copy.
+	 * This method is used to clone (shallow copy) a Tree object.
 	 * @return It returns a new Tree that is
 	 * a clone of the node.
 	 */
@@ -275,8 +275,8 @@ public class Node implements Tree {
 	}
 	
 	/**
-	 * This method is used to clone a Tree object. 
-	 * Deep copy: it also clones the children and the field objects.
+	 * This method is used to clone (deep copy) a Tree object. 
+	 * It also clones the children and the field objects.
 	 * @return It returns a new Tree that is
 	 * a deep copy of the tree.
 	 * @throws Exception If something goes wrong when adding
