@@ -161,7 +161,8 @@ public interface Tree extends Iterable<Tree> {
 	 * This method is used to clone a Tree object. 
 	 * Deep copy: it also clones the children and the field objects.
 	 * @return It returns a new Tree that is
-	 * a clone of the tree.
+	 * a deep copy of the tree.
+	 * @throws Exception
 	 */
 	public Tree cloneAll() throws Exception;
 	

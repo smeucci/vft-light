@@ -264,7 +264,7 @@ public class Leaf implements Tree {
 	 * This method is used to clone a Tree object. 
 	 * Deep copy: it also clones the field objects.
 	 * @return It returns a new Tree that is
-	 * a clone of the tree.
+	 * a deep copy of the tree.
 	 */
 	public Tree cloneAll() {
 		List<Field> fields = new ArrayList<Field>();
