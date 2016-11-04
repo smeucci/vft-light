@@ -50,7 +50,7 @@ public class DefaultBoxWrapper {
 	 */
 	protected void saveToCSVFile() throws IOException {
 		Writer out = new BufferedWriter(new OutputStreamWriter(
-					 new FileOutputStream("/home/saverio/Projects/vft-lite/dataset/newboxes.csv", true), "UTF-8"));
+					 new FileOutputStream("./dataset/newboxes.csv", true), "UTF-8"));
 		StringBuilder text = new StringBuilder();
 		text.append(box.getType());
 		text.append(",");
