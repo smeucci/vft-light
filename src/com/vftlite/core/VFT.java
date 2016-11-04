@@ -13,6 +13,7 @@ import org.jdom2.Element;
 import com.coremedia.iso.IsoFile;
 
 import static com.vftlite.util.Util.*;
+
 import com.vftlite.draw.Painter;
 import com.vftlite.io.*;
 import com.vftlite.parse.*;
@@ -269,30 +270,12 @@ public class VFT {
 	public static void mergeTree(Tree config, Tree tree, boolean withAttributes) throws Exception {
 		
 		if (tree.getNumChildren() > 0) {
-			Tree toBeUpdated = null;
 			Iterator<Tree> treeIterator = tree.iterator();
-			while (treeIterator.hasNext()) {
-				boolean isPresent = false;
+			while (treeIterator.hasNext()) {		
 				Tree treeChild = treeIterator.next();
-					
-				Iterator<Tree> configIterator = config.iterator();
-				if (configIterator != null) {
-					while (configIterator.hasNext() && !isPresent) {
-						Tree configChild = configIterator.next();
-						if (configChild.getName().equals(treeChild.getName()) && !configChild.getName().equals("trak")) {
-							isPresent = true;
-							toBeUpdated = configChild;
-						} else if (contains(checkTrakType(treeChild), "vide") && contains(checkTrakType(configChild), "vide")) {	
-							isPresent = true;
-							toBeUpdated = configChild;	
-						} else if (contains(checkTrakType(treeChild), "soun") && contains(checkTrakType(configChild), "soun")) {
-							isPresent = true;
-							toBeUpdated = configChild;
-						}
-					}
-				}
+				Tree toBeUpdated = getCorrespondingChildTree(treeChild, config);
 			
-				if (!isPresent) {
+				if (toBeUpdated == null) {
 					toBeUpdated = treeChild.clone();
 					toBeUpdated.setFather(config);
 					toBeUpdated.setLevel(config.getLevel() + 1);
@@ -304,9 +287,34 @@ public class VFT {
 				}
 				
 				mergeTree(toBeUpdated, treeChild, withAttributes);		
-			}	
+			}
 		}
 	
+	}
+	
+	/**
+	 * This method, given a query Tree and a reference Tree, return the child of
+	 * the reference Tree corresponding (same name, level, etc) to the query Tree.
+	 * @param query The query Tree.
+	 * @param reference The reference Tree.
+	 * @return The child of the reference Tree corresponding (same name, level, etc)
+	 *  to the query Tree.
+	 */
+	public static Tree getCorrespondingChildTree(Tree query, Tree reference) {
+		Iterator<Tree> referenceIterator = reference.iterator();
+		if (referenceIterator != null) {
+			while (referenceIterator.hasNext()) {
+				Tree referenceChild = referenceIterator.next();
+				if (query.getName().equals(referenceChild.getName()) && !referenceChild.getName().equals("trak")) {
+					return referenceChild;
+				} else if (contains(checkTrakType(referenceChild), "vide") && contains(checkTrakType(query), "vide")) {
+					return referenceChild;	
+				} else if (contains(checkTrakType(referenceChild), "soun") && contains(checkTrakType(query), "soun")) {
+					return referenceChild;
+				}				
+			}
+		}
+		return null;
 	}
 	
 	/**
