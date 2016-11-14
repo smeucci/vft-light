@@ -269,14 +269,14 @@ public class VFT {
 	 */
 	public static void mergeTree(Tree config, Tree tree, boolean withAttributes) throws Exception {
 		
-		if (tree.getNumChildren() > 0) {
+		if (tree.isLeaf() == false) {
 			Iterator<Tree> treeIterator = tree.iterator();
 			while (treeIterator.hasNext()) {		
 				Tree treeChild = treeIterator.next();
 				Tree toBeUpdated = getCorrespondingChildTree(treeChild, config);
 			
 				if (toBeUpdated == null) {
-					toBeUpdated = treeChild.clone();
+					toBeUpdated = treeChild.clone(); //TODO check leaf or node
 					toBeUpdated.setFather(config);
 					toBeUpdated.setLevel(config.getLevel() + 1);
 					config.addChild(toBeUpdated);

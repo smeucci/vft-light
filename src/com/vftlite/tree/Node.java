@@ -266,6 +266,16 @@ public class Node implements Tree {
 	}
 	
 	/**
+	 * Tell whether or not a Tree is a leaf.
+	 * @return It returns true if Tree is a leaf, ie 
+	 * cannot have children; it returns false if Tree is a
+	 * node.
+	 */
+	public Boolean isLeaf() {
+		return false;
+	}
+	
+	/**
 	 * This method is used to clone (shallow copy) a Tree object.
 	 * @return It returns a new Tree that is
 	 * a clone of the node.
