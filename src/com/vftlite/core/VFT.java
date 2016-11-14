@@ -301,7 +301,7 @@ public class VFT {
 	 *  to the query Tree.
 	 */
 	public static Tree getCorrespondingChildTree(Tree query, Tree reference) {
-		Iterator<Tree> referenceIterator = reference.iterator();
+		Iterator<Tree> referenceIterator = (reference != null) ? reference.iterator() : null;
 		if (referenceIterator != null) {
 			while (referenceIterator.hasNext()) {
 				Tree referenceChild = referenceIterator.next();
