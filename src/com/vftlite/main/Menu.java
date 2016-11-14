@@ -96,7 +96,6 @@ public class Menu {
 		
 		Option withAttributes_opt = Option.builder("wa")
 				.longOpt("with-attributes")
-				.argName("boolean")
 				.desc("whether to consider attributes in --merge and --update-config or not. Default is false")
 				.build();
 		opts.addOption(withAttributes_opt);
