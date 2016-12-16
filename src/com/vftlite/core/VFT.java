@@ -49,7 +49,7 @@ public class VFT {
 				Element root = parser(isoFile);
 				//save the content of the container on a xml file using the saveOnFile function of the FileReaderSaver class
 				fileSaver.saveOnFile(new Document(root));
-				System.out.println("XML file '" + fileSaver.getDestinationPath() + ".xml' created.");
+				System.out.println("XML file '" + fileSaver.getDestinationPath() + "' created.");
 			} else {
 				System.err.println("Wrong input format. The input file should be a video file (mp4 or mov).");
 			}
