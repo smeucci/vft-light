@@ -61,17 +61,17 @@ public class BoxParser {
 	 */
 	public void getBoxes(AbstractContainerBox ab, Element root) throws Exception {
 		List<Box> boxes = (ab == null) ? (this.isoFile.getBoxes()) : (ab.getBoxes());
-		int numUnkown = 1;
+		int numChild = 1;
 		for (Box box: boxes) {
 			String boxType = sanitize(box.getType());
 			Element item;
 			
 			try {
-				item = new Element(boxType);
+				item = new Element(boxType + "-" + numChild);
 			} catch (Exception e) {
-				item = new Element("unkn" + numUnkown);
-				numUnkown++;
+				item = new Element("unkn-" + numChild);
 			}
+			numChild++;
 			
 			String attributes = parseBoxAttributesAsString(box, boxType);
 			separateNameValue(item, extractNameValue(attributes));			
