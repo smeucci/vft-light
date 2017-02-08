@@ -63,7 +63,7 @@ public class FileReaderSaver {
 	*/
 	private void fillFilenamePath() {
 		String init = this.url;
-		String[] splits = init.split("\\/");
+		String[] splits = init.split("[/\\\\]");
 		this.filename = splits[splits.length - 1];
 	}
 	
