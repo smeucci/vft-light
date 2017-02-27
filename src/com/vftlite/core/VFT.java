@@ -9,6 +9,7 @@ import java.util.List;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.json.JSONObject;
 
 import com.coremedia.iso.IsoFile;
 
@@ -273,7 +274,7 @@ public class VFT {
 			Iterator<Tree> treeIterator = tree.iterator();
 			while (treeIterator.hasNext()) {		
 				Tree treeChild = treeIterator.next();
-				Tree toBeUpdated = getCorrespondingChildTree(treeChild, config);
+				Tree toBeUpdated = getCorrespondingChildTree(treeChild, config, false);
 			
 				if (toBeUpdated == null) {
 					toBeUpdated = treeChild.clone(); //TODO check leaf or node
@@ -300,12 +301,20 @@ public class VFT {
 	 * @return The child of the reference Tree corresponding (same name, level, etc)
 	 *  to the query Tree.
 	 */
-	public static Tree getCorrespondingChildTree(Tree query, Tree reference) {
+	public static Tree getCorrespondingChildTree(Tree query, Tree reference, Boolean unused) {
 		Iterator<Tree> referenceIterator = (reference != null) ? reference.iterator() : null;
 		if (referenceIterator != null) {
 			while (referenceIterator.hasNext()) {
 				Tree referenceChild = referenceIterator.next();
-				if (query.getName().equals(referenceChild.getName()) && !referenceChild.getName().equals("trak")) {
+				
+				String queryName = query.getName();
+				String refChildName = referenceChild.getName();
+				if (unused) {
+					queryName = queryName.split("-")[0];
+					refChildName = refChildName.split("-")[0];
+				}
+				
+				if (queryName.equals(refChildName) && !refChildName.contains("trak")) {
 					return referenceChild;
 				} else if (contains(checkTrakType(referenceChild), "vide") && contains(checkTrakType(query), "vide")) {
 					return referenceChild;	
@@ -391,10 +400,18 @@ public class VFT {
 	 * @return The type of the trak; empty if the type cannot be determined.
 	 */
 	public static String checkTrakType(Tree trak) {
-		if (trak instanceof Node && trak.getName().equals("trak")) {
-			Node mdia = (Node) ((Node) trak).getChildByName("mdia");
-			Tree hdlr = mdia.getChildByName("hdlr");
-			return hdlr.getFieldValue("handlerType");
+		if (trak.getName().contains("trak")) {
+			for (Tree trakChild: trak.getChildren()) {
+				if (trakChild.getName().contains("mdia")) {
+					Tree mdia = trakChild;
+					for (Tree mdiaChild: mdia.getChildren()) {
+						if (mdiaChild.getName().contains("hdlr")) {
+							Tree hdlr = mdiaChild;
+							return hdlr.getFieldValue("handlerType");
+						}
+					}
+				}
+			}
 		}
 		return "";
 	}
@@ -452,6 +469,79 @@ public class VFT {
 				updateConfig(config, f.getAbsolutePath(), withAttributes);
 			}
 		}
+	}
+	
+	/**
+	 * 
+	 * @param referencepath
+	 * @param querypath
+	 */
+	public static void compare(String referencepath, String querypath) {
+		try {
+			Tree ref = buildTreeFromXMLFile(referencepath);
+			Tree query = buildTreeFromXMLFile(querypath);
+			int[] stats = {0, 0};
+			stats = compareTree(ref, query, stats);
+			
+			JSONObject res = new JSONObject();
+			res.put("reference", referencepath);
+			res.put("query", querypath);
+			res.put("tot", stats[0]);
+			res.put("diff", stats[1]);
+			
+			System.out.print(res.toString() + "\n");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 
+	 * @param ref
+	 * @param query
+	 * @param stats
+	 * @return
+	 */
+	public static int[] compareTree(Tree ref, Tree query, int[] stats) {
+		Boolean unused = false;
+		if (ref.isLeaf() == false) {
+			Iterator<Tree> refIterator = ref.iterator();
+			while (refIterator.hasNext()) {
+				Tree refChild = refIterator.next();
+				unused = (unused) ? true : unusedAtom(refChild);
+				if (unusedAtom(refChild) == false) {
+					//System.out.println("-- " + refChild.getName());
+					Tree queryChild = getCorrespondingChildTree(refChild, query, unused);
+					stats = checkDiff(refChild, queryChild, stats);
+					stats = compareTree(refChild, queryChild, stats);
+				}
+			}
+		}
+		return stats;
+	}
+	
+	/**
+	 * 
+	 * @param ref
+	 * @param query
+	 * @param stats
+	 * @return
+	 */
+	public static int[] checkDiff(Tree ref, Tree query, int[] stats) {
+		for (Field refField: ref.getFieldsList()) {
+			if (unusedField(refField.getName()) == false) {
+				Field queryField = (query == null) ? null : query.getFieldByName(refField.getName());
+				
+				if (queryField == null || !refField.getValue().equals(queryField.getValue())) {
+					stats[1]++;
+					//System.out.println(refField.getName());
+				}			
+				
+				stats[0]++;
+			}
+		}
+
+		return stats;
 	}
 	
 }
