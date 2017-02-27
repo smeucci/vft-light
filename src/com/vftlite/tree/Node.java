@@ -266,6 +266,16 @@ public class Node implements Tree {
 	}
 	
 	/**
+	 * 
+	 */
+	/**
+	 * 
+	 */
+	public List<Tree> getChildren() {
+		return this.children;
+	}
+	
+	/**
 	 * Tell whether or not a Tree is a leaf.
 	 * @return It returns true if Tree is a leaf, ie 
 	 * cannot have children; it returns false if Tree is a

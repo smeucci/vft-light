@@ -252,6 +252,13 @@ public class Leaf implements Tree {
 	}
 	
 	/**
+	 * 
+	 */
+	public List<Tree> getChildren() {
+		return null;
+	}
+	
+	/**
 	 * Tell whether or not a Tree is a leaf.
 	 * @return It returns true if Tree is a leaf, ie 
 	 * cannot have children; it returns false if Tree is a

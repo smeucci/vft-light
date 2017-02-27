@@ -151,6 +151,11 @@ public interface Tree extends Iterable<Tree> {
 	public Tree getChildByName(String name);
 	
 	/**
+	 * 
+	 */
+	public List<Tree> getChildren();
+	
+	/**
 	 * Tell whether or not a Tree is a leaf.
 	 * @return It returns true if Tree is a leaf, ie 
 	 * cannot have children; it returns false if Tree is a
