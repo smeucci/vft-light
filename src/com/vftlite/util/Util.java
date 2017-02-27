@@ -2,6 +2,8 @@ package com.vftlite.util;
 
 import java.util.Arrays;
 
+import com.vftlite.tree.Tree;
+
 /**
 * <h1>Some utility functions.</h1>
 * <p>Util is a static class that implements some
@@ -91,5 +93,27 @@ public class Util {
         }
         return n;
     }
+	
+	/**
+	 * 
+	 * @param field
+	 * @return
+	 */
+	public static Boolean unusedField(String field) {
+		if (field.matches("stuff")) return true;
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param tree
+	 * @return
+	 */
+	public static Boolean unusedAtom(Tree tree) {
+		if (tree.getName().contains("xyz")) return true;
+		if (tree.getName().contains("unkn-5")) return true;
+		if (tree.getName().contains("udta") && tree.getNumChildren() == 1 && tree.getChildren().get(0).getName().contains("xyz")) return true;
+		return false;
+	}
 	
 }
