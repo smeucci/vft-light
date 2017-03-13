@@ -33,6 +33,7 @@ import com.vftlite.tree.Tree;
 public class VFT {
 	 
 	private static int id = 0;
+	private static String fields = "";
 
 	/**
 	 * This method serves as an interface for the cli app to parse
@@ -488,6 +489,7 @@ public class VFT {
 			res.put("query", querypath);
 			res.put("tot", stats[0]);
 			res.put("diff", stats[1]);
+			res.put("fields", fields);
 			
 			System.out.print(res.toString() + "\n");
 		} catch (Exception e) {
@@ -534,7 +536,9 @@ public class VFT {
 				
 				if (queryField == null || !refField.getValue().equals(queryField.getValue())) {
 					stats[1]++;
-					//System.out.println(refField.getName());
+					String queryFieldValue = (queryField == null) ? "null" : queryField.getValue();
+					fields = fields + ref.getName() + ": " + refField.getName() 
+							+ ", " + refField.getValue() + ", " + queryFieldValue + ";";
 				}			
 				
 				stats[0]++;
