@@ -8,7 +8,6 @@ import java.util.List;
 import org.jdom2.Element;
 
 import com.vftlite.parse.wrapper.*;
-
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.boxes.Box;
 import com.coremedia.iso.boxes.EditListBox;
@@ -17,6 +16,7 @@ import com.coremedia.iso.boxes.HandlerBox;
 import com.coremedia.iso.boxes.OriginalFormatBox;
 import com.coremedia.iso.boxes.SampleDependencyTypeBox;
 import com.coremedia.iso.boxes.TrackHeaderBox;
+import com.coremedia.iso.boxes.UserBox;
 import com.coremedia.iso.boxes.fragment.MovieExtendsHeaderBox;
 import com.coremedia.iso.boxes.fragment.MovieFragmentBox;
 import com.coremedia.iso.boxes.fragment.TrackExtendsBox;
@@ -188,6 +188,9 @@ public class BoxParser {
 			break;
 		case "pasp":
 			attr = new PixelAspectRationAtomWrapper((PixelAspectRationAtom) box).toString();
+			break;
+		case "uuid":
+			attr = new UserBoxWrapper((UserBox) box).toString();
 			break;
 		//case "day":
 			//attr = new AppleRecordingYear2BoxWrapper((AppleRecordingYear2Box) box).toString();
