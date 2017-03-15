@@ -23,6 +23,7 @@ import com.coremedia.iso.boxes.fragment.TrackExtendsBox;
 import com.coremedia.iso.boxes.mdat.MediaDataBox;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
+import com.coremedia.iso.boxes.threegpp26244.LocationInformationBox;
 import com.googlecode.mp4parser.AbstractContainerBox;
 import com.googlecode.mp4parser.AbstractFullBox;
 import com.googlecode.mp4parser.boxes.apple.AppleGPSCoordinatesBox;
@@ -191,6 +192,9 @@ public class BoxParser {
 			break;
 		case "uuid":
 			attr = new UserBoxWrapper((UserBox) box).toString();
+			break;
+		case "loci":
+			attr = new LocationInformationBoxWrapper((LocationInformationBox) box).toString();
 			break;
 		//case "day":
 			//attr = new AppleRecordingYear2BoxWrapper((AppleRecordingYear2Box) box).toString();
