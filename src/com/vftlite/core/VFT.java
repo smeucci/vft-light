@@ -33,7 +33,10 @@ import com.vftlite.tree.Tree;
 public class VFT {
 	 
 	private static int id = 0;
-	private static String fields = "";
+	private static List<String> refNames = new ArrayList<String>();
+	private static List<String> refFieldNames = new ArrayList<String>();
+	private static List<String> refFieldValues = new ArrayList<String>();
+	private static List<String> queryFieldValues = new ArrayList<String>();
 
 	/**
 	 * This method serves as an interface for the cli app to parse
@@ -489,9 +492,19 @@ public class VFT {
 			res.put("query", querypath);
 			res.put("tot", stats[0]);
 			res.put("diff", stats[1]);
-			res.put("fields", fields);
 			
-			System.out.print(res.toString() + "\n");
+			List<JSONObject> fieldsList = new ArrayList<JSONObject>();
+			for (int i = 0; i < refNames.size(); i++) {
+				JSONObject f = new JSONObject();
+				f.put("atom", refNames.get(i));
+				f.put("field", refFieldNames.get(i));
+				f.put("refValue", refFieldValues.get(i));
+				f.put("queryValue", queryFieldValues.get(i));
+				fieldsList.add(f);
+			}
+			res.put("fields", fieldsList);
+			
+			System.out.print(res.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -537,8 +550,10 @@ public class VFT {
 				if (queryField == null || !refField.getValue().equals(queryField.getValue())) {
 					stats[1]++;
 					String queryFieldValue = (queryField == null) ? "null" : queryField.getValue();
-					fields = fields + ref.getName() + ": " + refField.getName() 
-							+ ", " + refField.getValue() + ", " + queryFieldValue + ";";
+					refNames.add(ref.getName());
+					refFieldNames.add(refField.getName());
+					refFieldValues.add(refField.getValue());
+					queryFieldValues.add(queryFieldValue);
 				}			
 				
 				stats[0]++;
