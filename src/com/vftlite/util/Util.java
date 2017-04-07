@@ -100,8 +100,11 @@ public class Util {
 	 * @return
 	 */
 	public static Boolean unusedField(String field) {
-		if (field.matches("stuff")) return true;
-		return false;
+		if (field.matches("stuff|creationTime|modificationTime|size|duration|entryCount|sampleCount")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
